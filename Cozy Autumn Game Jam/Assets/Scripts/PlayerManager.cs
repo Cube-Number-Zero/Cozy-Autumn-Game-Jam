@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerManager : MonoBehaviour
 {
     
-	#region Singleton
+	#region Singleton // no clue what this does
 	
 	public static PlayerManager instance;
 	
@@ -16,6 +16,8 @@ public class PlayerManager : MonoBehaviour
 	
 	#endregion
 	
-	public GameObject player;
+	public GameObject player; // Allows other scripts to find the player with PlayerManager.instance.player
+	public GameObject burt; // Allows other scripts to find Burt with PlayerManager.instance.burt
+	public float sanity = 1f; // This is the player's sanity; I put it here because so many systems will use it
 	
 }
