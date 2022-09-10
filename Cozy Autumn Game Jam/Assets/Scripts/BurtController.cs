@@ -19,11 +19,11 @@ public class BurtController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-		sightlinesMarker = GameObject.Find("Burt's Canopy LoS Raycast");
+		
+		sightlinesMarker = GameObject.Find("Burt's Line of Sight Raycast");
 		target = GameObject.Find("PlayerCapsule").transform;// make the player a target to observe
         agent = GetComponent<NavMeshAgent>();
 		
-		//FirstPersonController FPCtest = ptarget.GetComponent<FirstPersonController>();
     }
 
     // Update is called once per frame
