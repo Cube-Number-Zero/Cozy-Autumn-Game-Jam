@@ -25,17 +25,12 @@ public class BurtController : MonoBehaviour
 	Transform target;
 	Transform player;
 
-	//NavMeshAgent agent;       <- Ignore this, I'm working on a better method. -CM
-	
     void Start()
     {
 		
 		target = GameObject.Find("BurtFlightTarget").transform; // allows BurtFlightTarget to be referenced at any time with "target"
 		player = GameObject.Find("PlayerCapsule").transform; // allows PlayerCapsule to be referenced at any time with "player"
 
-
-        //agent = GetComponent<NavMeshAgent>();       <- Ignore this, I'm working on a better method. -CM
-		
     }
 
     void Update()
