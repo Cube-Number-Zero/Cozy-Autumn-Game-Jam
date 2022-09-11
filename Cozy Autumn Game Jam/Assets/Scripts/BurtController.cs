@@ -5,66 +5,114 @@ using UnityEngine.AI;
 
 public class BurtController : MonoBehaviour
 {
-	private float canopyHeight = 1f;                                    // What is the height of the tree canopy that hides the player from Burt?				  
-	public Vector3 sightlines = new Vector3(0, 0, 0); // This is used for the framework of the mechanic allowing
-	public bool hasLineOfSight = false;                          // the player to hide from Burt under the forest canopy
 	
-	public float lookRadius = 10f; // How far Burt can see the player from
+	public bool isPlayerVisible = false;
 	
+	public Vector3 flightDirectionToTarget;
+
+	public Vector3 currentFlightDirection = new Vector3(1f, 0f, 0f);
+
+	public float flightTurningSpeed = 1f;
+
+	public float flightSpeed = 10f;
+
+	public float targetOrbitFrustration = 1f; // This will make Burt better at turning the longer he spends moving away from the target; implemented to prevent "orbiting" behavior
+
+	public float frustrationGrowthRate = 0.01f; // The base rate at which Burt's frustration will grow, note that Burt's frustration is compounding; this just gives the frustration a kick to start the system
+
+	private float lastTargetDistance = 0;
 	
 	Transform target;
-	GameObject sightlinesMarker;
-	NavMeshAgent agent;
+	Transform player;
+
+	//NavMeshAgent agent;       <- Ignore this, I'm working on a better method. -CM
 	
-    // Start is called before the first frame update
     void Start()
     {
 		
-		sightlinesMarker = GameObject.Find("Burt's Line of Sight Raycast");
-		target = GameObject.Find("PlayerCapsule").transform;// make the player a target to observe
-        agent = GetComponent<NavMeshAgent>();
+		target = GameObject.Find("BurtFlightTarget").transform; // allows BurtFlightTarget to be referenced at any time with "target"
+		player = GameObject.Find("PlayerCapsule").transform; // allows PlayerCapsule to be referenced at any time with "player"
+
+
+        //agent = GetComponent<NavMeshAgent>();       <- Ignore this, I'm working on a better method. -CM
 		
     }
 
-    // Update is called once per frame
     void Update()
     {
-		#region MakeshiftRaycast
-		
-			float canopyRaycastHitRatio = (canopyHeight - target.position.y) / (transform.position.y - target.position.y); // This is how far the canopy is along the line from the player to Burt
-			sightlines.x = canopyRaycastHitRatio * (transform.position.x - target.position.x) + target.position.x;         // The x coordinate of the raycast's result
-			sightlines.z = canopyRaycastHitRatio * (transform.position.z - target.position.z) + target.position.z;         // The z coordinate of the raycast's result
-			sightlines.y = canopyHeight;
-			
-			/*
-				If we know what areas of the map have a canopy above them (with, for example, a 2D image of the map with areas covered in one color and areas exposed in another) we can use the x and z coordinates
-				calculated above to determine if Burt has line of sight to the player.
-			*/
-			
-			sightlinesMarker.transform.position = sightlines;
-		
-		#endregion
-		
-		
-		
-        float distance = Vector3.Distance(target.position, transform.position); // get distance to player
-		if (distance <= lookRadius) // if the player is within a certain radius, do:
-		{
-			
-			agent.SetDestination(target.position); // start navigating to the player
-			
-			if (distance <= agent.stoppingDistance)
-			{
-				//murder the player
-			}
-		}
+
+		flightDirectionToTarget = (target.position - transform.position) / Vector3.Distance(target.position, transform.position); // Update flightDirectionToTarget to the new normalized vector
+
+		isPlayerVisible = CanSeePlayer();
+
+		flyTowardsTarget();
+
     }
-	
-	
+
+	void flyTowardsTarget ()
+	{
+
+        Vector3 originalDirection = currentFlightDirection;
+
+        Vector3 turningNeeded = flightDirectionToTarget - currentFlightDirection; // How much does Burt need to turn to be facing the target?
+        turningNeeded *= flightTurningSpeed * targetOrbitFrustration * Time.deltaTime / Vector3.Distance(currentFlightDirection, flightDirectionToTarget);
+        currentFlightDirection += turningNeeded; // Turn slightly towards the target
+        currentFlightDirection = currentFlightDirection.normalized; // Normalize to avoid Burt speeding up or slowing down
+
+		Vector3 howMuchDidBurtJustTurn = currentFlightDirection - originalDirection; // The pinnacle of naming variables
+		howMuchDidBurtJustTurn = howMuchDidBurtJustTurn.normalized * flightTurningSpeed * targetOrbitFrustration * Time.deltaTime; // god i just love normalizing vectors
+		currentFlightDirection = originalDirection + howMuchDidBurtJustTurn;
+        currentFlightDirection = currentFlightDirection.normalized; // Normalize to avoid Burt speeding up or slowing down...again
+
+        transform.position += currentFlightDirection * Time.deltaTime * flightSpeed; // Fly forwards, the random value is to prevent Burt from "orbiting" the target
+
+		if (lastTargetDistance < Vector3.Distance(transform.position, target.position))
+		{
+			targetOrbitFrustration += (frustrationGrowthRate + targetOrbitFrustration - 1f) * Time.deltaTime;
+		}
+
+		lastTargetDistance = Vector3.Distance(transform.position, target.position);
+
+        Debug.DrawRay(transform.position, flightDirectionToTarget, Color.red);
+        Debug.DrawRay(transform.position, currentFlightDirection, Color.blue);
+
+		if(Vector3.Distance(transform.position, target.position) < 1)
+		{
+
+			target.position = new Vector3(
+				Random.Range(-11.7f, 20f),
+				Random.Range(10f, 20f),
+				Random.Range(-1.5f, 28.5f)
+			);
+
+			targetOrbitFrustration = 1f;
+        }
+
+		// Finally, rotate the model according to the movement direction
+
+		Quaternion lookRotation = Quaternion.LookRotation(currentFlightDirection);
+		transform.rotation = lookRotation;
+
+    }
+
+    bool CanSeePlayer ()
+	{
+		Vector3 raycastDir = new Vector3(0f, 0.5f, 0f) + player.position - transform.position; // get the direction Burt needs to look in to see the player
+		var ray = new Ray(transform.position, raycastDir); // look in the direction of the player with a raycast
+		RaycastHit hit;
+		if (Physics.Raycast(ray, out hit))
+		{
+			return (hit.transform.name == "Capsule_Player"); // test if that raycast hit the player and return the output
+		}
+		else
+		{
+			return false; // return false if the raycast never saw anything at all
+		}
+	}
 	
 	void OnDrawGizmosSelected ()
 	{
-		Gizmos.color = Color.red;
-		Gizmos.DrawWireSphere(transform.position, lookRadius);
+		//Gizmos.color = Color.red;
+		//Gizmos.DrawWireSphere(raycasthitpos, 1f);
 	}
 }
