@@ -67,9 +67,6 @@ namespace StarterAssets
 		private float _jumpTimeoutDelta;
 		private float _fallTimeoutDelta;
 
-		// misc
-		public bool inventoryOpen = false;
-
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 		private PlayerInput _playerInput;
 #endif
@@ -282,7 +279,7 @@ namespace StarterAssets
 			if(_input.inventory) // If the player presses the button to open the inventory, ...
 			{
                 _input.inventory = false; // Reset the button's input back to false so everything else here is only done once
-				inventoryOpen = !inventoryOpen; // Toggle whether or not the inventory is open
+				_interactions.inventoryOpen = !_interactions.inventoryOpen; // Toggle whether or not the inventory is open
             }
 		}
     }

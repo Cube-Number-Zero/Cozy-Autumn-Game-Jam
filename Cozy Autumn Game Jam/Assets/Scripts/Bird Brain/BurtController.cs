@@ -42,7 +42,7 @@ public class BurtController : MonoBehaviour
 	public Vector3 currentFlightDirection = new Vector3(1f, 0f, 0f);
 	[Range(1f, 1000f)]
 	public float targetOrbitFrustration = 1f; // This will make Burt better at turning the longer he spends moving away from the target; implemented to prevent "orbiting" behavior
-	[Range(0f, 100f)]
+	[Range(0f, 1f)]
 	public float seenPlayerCertainty = 0f;
 	private float lastTargetDistance = 0f;
 	[Range(0f, 1f)]
@@ -69,24 +69,25 @@ public class BurtController : MonoBehaviour
 		burtAggressionGeneral = (1f - pmanager.sanity * 0.01f) * (1f - baseAggression) + baseAggression;
 		if(CanSeePlayer()) // Tests if Burt has line of sight to the player
 		{
-			lastSeenPlayerLoc = player.position;
-			seenPlayerCertainty += seenPlayerCertainty + burtVisionCertaintyGrowth * Time.deltaTime > 1f ? 1f - seenPlayerCertainty : burtVisionCertaintyGrowth * Time.deltaTime;
+			lastSeenPlayerLoc = player.position; // Marks the location of the player as lastSeenPlayerLoc
+			seenPlayerCertainty += seenPlayerCertainty + burtVisionCertaintyGrowth * Time.deltaTime > 1f ? 1f - seenPlayerCertainty : burtVisionCertaintyGrowth * Time.deltaTime; // Increases seenPlayerCertainty if Burt can see the player up to a maximum of 1 (Yes, that's all this line does)
 			isPlayerVisible = true;
 		}
 		else
 		{
 			isPlayerVisible = false;
-			seenPlayerCertainty -= seenPlayerCertainty - burtVisionCertaintyDecay * Time.deltaTime < 0f ? seenPlayerCertainty : burtVisionCertaintyDecay * Time.deltaTime;
-		}
+			seenPlayerCertainty -= seenPlayerCertainty - burtVisionCertaintyDecay * Time.deltaTime < 0f ? seenPlayerCertainty : burtVisionCertaintyDecay * Time.deltaTime; // Decreases seenPlayerCertainty if Burt can't see the player down to a minimum of 0 (Yes, that's all this line does)
+        }
 
 		if(seenPlayerCertainty > 0)
 		{
+			// Burt has an idea where the player is
             Vector3 playerTargetOffset = (lastSeenPlayerLoc - target.position); // Where the player is in relation to the target
-            playerTargetOffset.y *= 0.5f;
-            target.position += playerTargetOffset.normalized * Time.deltaTime * seenPlayerCertainty * Mathf.Pow(burtAggressionGeneral, 2) * 16f;
+            playerTargetOffset.y *= 0.5f; // Makes Burt prioritise being near the player on the XZ axis before focusing on height
+            target.position += playerTargetOffset.normalized * Time.deltaTime * seenPlayerCertainty * Mathf.Pow(burtAggressionGeneral, 2) * 16f; // Move the target towards the last seen position of the player
         }
 
-		float sanityRemoved = burtProximitySanityDecay / Mathf.Pow(Vector3.Distance(transform.position, player.position), 3f) * Time.deltaTime;
+		float sanityRemoved = burtProximitySanityDecay / Mathf.Pow(Vector3.Distance(transform.position, player.position), 3f) * Time.deltaTime; // Reduce the player's sanity if they're near Burt
         pmanager.sanity -= pmanager.sanity <= sanityRemoved ? pmanager.sanity : sanityRemoved;
         flyTowardsTarget();
 
@@ -139,7 +140,7 @@ public class BurtController : MonoBehaviour
 
 		if(Vector3.Distance(transform.position, target.position) < 1f)
 		{
-
+			// Temporary code to move the target to a random location if Burt gets near
 			target.position = new Vector3(
 				Random.Range(-11.7f, 20f),
 				Random.Range(0.6f, 20.0f),
@@ -160,7 +161,7 @@ public class BurtController : MonoBehaviour
 
 
 
-	void DontHitWalls ()
+	void DontHitWalls () // I wrote this in a fugue state or something; even I don't know what it does
 	{
 		//Figuring out where to look for open paths
 

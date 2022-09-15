@@ -18,7 +18,12 @@ namespace StarterAssets
 
         private StarterAssetsInputs inputs;
 
-        enum side {Left, Right};
+        public bool inventoryOpen = false;
+        public bool isLookingAtItem = false;
+
+        public GameObject playerVisionTarget;
+
+        public enum side {Left, Right};
 
         void Start()
         {
@@ -36,27 +41,86 @@ namespace StarterAssets
 
         void Update()
         {
-            // See if the player is pressing any of the relavent buttons
-            if (inputs.interactR)
+            testIfLookingAtObject();
+            if (inventoryOpen)
             {
-                inputs.interactR = false;
-                testInteraction(side.Right);
+                //The player does have the inventory open, so the controls do different things
+                if (inputs.interactR)
+                {
+                    inputs.interactR = false;
+                    if (hasBag)
+                    {
+                        Item tempItem = rightHandItem;
+                        rightHandItem = bagItem;
+                        bagItem = tempItem;
+                    }
+                    else
+                        Debug.Log("You just tried to switch right hand item, but you don't have a bag");
+                }
+                if (inputs.interactL)
+                {
+                    inputs.interactL = false;
+                    if (hasBag)
+                    {
+                        Item tempItem = leftHandItem;
+                        leftHandItem = bagItem;
+                        bagItem = tempItem;
+                    }
+                    else
+                        Debug.Log("You just tried to switch left hand item, but you don't have a bag");
+                }
+                if (inputs.useL)
+                {
+                    inputs.useL = false;
+                    useItem(leftHandItem);
+                }
+                if (inputs.useR)
+                {
+                    inputs.useR = false;
+                    useItem(rightHandItem);
+                }
             }
-            if (inputs.interactL)
+            else
             {
-                inputs.interactL = false;
-                testInteraction(side.Left);
+                // The player does not have the inventory open, and can interact and use normally
+                if (inputs.interactR)
+                {
+                    inputs.interactR = false;
+                    testInteraction(side.Right);
+                }
+                if (inputs.interactL)
+                {
+                    inputs.interactL = false;
+                    testInteraction(side.Left);
+                }
+                if (inputs.useL)
+                {
+                    inputs.useL = false;
+                    useItem(leftHandItem);
+                }
+                if (inputs.useR)
+                {
+                    inputs.useR = false;
+                    useItem(rightHandItem);
+                }
             }
-            if (inputs.useL)
+        }
+
+        private void testIfLookingAtObject()
+        {
+            Transform cam = GameObject.Find("PlayerCameraRoot").transform;
+            Vector3 cameraDirection = cam.rotation * new Vector3(0f, 0f, 1f); // Where is the player looking?
+            RaycastHit hit;
+            if (Physics.Raycast(cam.position, cameraDirection, out hit))
             {
-                inputs.useL = false;
-                useItem(leftHandItem);
+                playerVisionTarget = hit.collider.gameObject;
+                if (playerVisionTarget.GetComponent<Interactable>() == null)
+                    isLookingAtItem = false;
+                else
+                    isLookingAtItem = true;
             }
-            if (inputs.useR)
-            {
-                inputs.useR = false;
-                useItem(rightHandItem);
-            }
+            else
+                isLookingAtItem = false;
         }
 
         private void useItem(Item item)
@@ -77,19 +141,15 @@ namespace StarterAssets
 
         private void testInteraction(side hand)
         {
-            Transform cam = GameObject.Find("PlayerCameraRoot").transform;
-            Vector3 cameraDirection = cam.rotation * new Vector3(0f, 0f, 1f); // Where is the player looking?
-            RaycastHit hit;
-
-            if (Physics.Raycast(cam.position, cameraDirection, out hit))
+            Interactable interactable;
+            if(isLookingAtItem && playerVisionTarget != null)
             {
-                Interactable interactable = hit.collider.GetComponent<Interactable>();
-
+                interactable = playerVisionTarget.GetComponent<Interactable>();
                 if (interactable != null)
                 {
                     // You are looking at an item
 
-                    if (Vector3.Distance(hit.collider.transform.position, transform.position) > interactable.usableRadius)
+                    if (Vector3.Distance(playerVisionTarget.transform.position, transform.position) > interactable.usableRadius)
                     {
                         //You are looking at an item, but it is too far away to use
                         Debug.Log("Item is too far");
@@ -97,26 +157,30 @@ namespace StarterAssets
                     else
                     {
                         //You are looking at an item and are close enough to pick it up
-                        if (hand == side.Right && rightHandItem.type == "NONE")
+                        if (interactable.item.type == "BAG")
                         {
-                            rightHandItem = interactable.item;
-                            Destroy(hit.collider.gameObject);
-                            if (rightHandItem.type == "ACTIVESTONE")
-                                rightHandItem.type = "STONE";
+                            // If it's a bag, wear it instead of picking it up
+                            hasBag = true;
+                            Destroy(playerVisionTarget);
                         }
-                        if (hand == side.Left && leftHandItem.type == "NONE")
+                        else
                         {
-                            leftHandItem = interactable.item;
-                            Destroy(hit.collider.gameObject);
-                            if (leftHandItem.type == "ACTIVESTONE")
-                                leftHandItem.type = "STONE";
+                            if (hand == side.Right && rightHandItem.type == "NONE")
+                            {
+                                rightHandItem = interactable.item;
+                                Destroy(playerVisionTarget);
+                                if (rightHandItem.type == "ACTIVESTONE")
+                                    rightHandItem.type = "STONE";
+                            }
+                            if (hand == side.Left && leftHandItem.type == "NONE")
+                            {
+                                leftHandItem = interactable.item;
+                                Destroy(playerVisionTarget);
+                                if (leftHandItem.type == "ACTIVESTONE")
+                                    leftHandItem.type = "STONE";
+                            }
                         }
                     }
-                }
-                else
-                {
-                    // You aren't looking at an item
-                    Debug.Log("No interactable item detected");
                 }
             }
         }

@@ -15,9 +15,6 @@ public class Interactable : MonoBehaviour
     void Start()
     {
         player = GameObject.Find("PlayerCapsule");
-
-
-        //Debug.Log(player.GetComponent<InteractionController>().hasBag);
     }
 
     void OnDrawGizmosSelected()

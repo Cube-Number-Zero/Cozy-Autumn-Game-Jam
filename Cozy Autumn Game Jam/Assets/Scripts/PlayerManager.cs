@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerManager : MonoBehaviour
 {
     
-	#region Singleton // no clue what this does
+	#region Singleton
 	
 	public static PlayerManager instance;
 	
