@@ -18,6 +18,7 @@ public class BurtController : MonoBehaviour
 	[Tooltip("How quickly being near Burt will decay the player's sanity")]
 	public float burtProximitySanityDecay = 1f;
 	[Tooltip("How aggresive Burt is when sanity is full")]
+	[Range(0f, 1f)]
 	public float baseAggression = 0.3f;
 
 	#endregion
@@ -34,13 +35,17 @@ public class BurtController : MonoBehaviour
 	[Tooltip("This affects how large a hole needs to be for Burt to think he can fly through it")]
     public float obstacleAvoidingSpherecastRadius = 1f;
 
-	[Header("Don't change these in the inspector")]
+	[Header("Don't change these in the inspector before running")]
     public bool isPlayerVisible = false;
+	[HideInInspector]
 	public Vector3 flightDirectionToTarget;
 	public Vector3 currentFlightDirection = new Vector3(1f, 0f, 0f);
+	[Range(1f, 1000f)]
 	public float targetOrbitFrustration = 1f; // This will make Burt better at turning the longer he spends moving away from the target; implemented to prevent "orbiting" behavior
+	[Range(0f, 100f)]
 	public float seenPlayerCertainty = 0f;
 	private float lastTargetDistance = 0f;
+	[Range(0f, 1f)]
     public float burtAggressionGeneral = 1f;
 	public Vector3 lastSeenPlayerLoc = new Vector3(0f, 0f, 0f);
 
@@ -61,7 +66,7 @@ public class BurtController : MonoBehaviour
 
     void Update()
     {
-		burtAggressionGeneral = (1f - pmanager.sanity) * (1f - baseAggression) + baseAggression;
+		burtAggressionGeneral = (1f - pmanager.sanity * 0.01f) * (1f - baseAggression) + baseAggression;
 		if(CanSeePlayer()) // Tests if Burt has line of sight to the player
 		{
 			lastSeenPlayerLoc = player.position;
@@ -119,10 +124,10 @@ public class BurtController : MonoBehaviour
 
         transform.position += currentFlightDirection * Time.deltaTime * flightSpeed; // Fly forwards, the random value is to prevent Burt from "orbiting" the target
 
-		if(transform.position.y < 0.6)
+		if(transform.position.y < 0.6f)
 		{
 			transform.position = new Vector3(transform.position.x, 0.6f, transform.position.z);
-			currentFlightDirection.y = 0;
+			currentFlightDirection.y = 0f;
 		}
 
 		if (lastTargetDistance < Vector3.Distance(transform.position, target.position))
@@ -132,12 +137,12 @@ public class BurtController : MonoBehaviour
 
 		lastTargetDistance = Vector3.Distance(transform.position, target.position);
 
-		if(Vector3.Distance(transform.position, target.position) < 1)
+		if(Vector3.Distance(transform.position, target.position) < 1f)
 		{
 
 			target.position = new Vector3(
 				Random.Range(-11.7f, 20f),
-				Random.Range(0.6f, 20f),
+				Random.Range(0.6f, 20.0f),
 				Random.Range(-1.5f, 28.5f)
 			);
 
@@ -168,8 +173,8 @@ public class BurtController : MonoBehaviour
 		for(int i = 0; i < numPoints; i++)
 		{
 			float t = i / (numPoints - 1f);
-			float inclination = Mathf.Acos(1 - 2 * t);
-			float azimuth = 2 * Mathf.PI * turnFraction * i;
+			float inclination = Mathf.Acos(1f - 2f * t);
+			float azimuth = 2f * Mathf.PI * turnFraction * i;
 
 			float x = Mathf.Sin(inclination) * Mathf.Cos(azimuth);
             float y = Mathf.Sin(inclination) * Mathf.Sin(azimuth);

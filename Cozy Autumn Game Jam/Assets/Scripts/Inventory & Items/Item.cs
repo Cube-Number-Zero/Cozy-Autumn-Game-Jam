@@ -14,8 +14,9 @@ public class Item : ScriptableObject
      * LOUDTOY - Loud single-use distraction
      * NONE - No item
      * BAG - The permanent backpack upgrade
+     * WOOD - Firewood
      */
-    [Tooltip("TOY1, TOY2, STONE, ACTIVESTONE, LOUDTOY, BAG, NONE")]
+    [Tooltip("TOY1, TOY2, STONE, ACTIVESTONE, LOUDTOY, BAG, WOOD, NONE")]
     public string type = "NONE";
 
     private void update()
@@ -35,6 +36,9 @@ public class Item : ScriptableObject
                 return;
             case "BAG":
                 updateBag();
+                return;
+            case "WOOD":
+                updateWood();
                 return;
             case "NONE":
                 return;
@@ -63,6 +67,10 @@ public class Item : ScriptableObject
 
     }
     private void updateBag()
+    {
+
+    }
+    private void updateWood()
     {
 
     }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Audio;
 using UnityEngine;
 
 public class DynamicSoundtrackManager : MonoBehaviour
@@ -26,13 +27,13 @@ public class DynamicSoundtrackManager : MonoBehaviour
 
     void Update()
     {
-        sanity = controller.GetComponent<PlayerManager>().sanity;
+        sanity = controller.GetComponent<PlayerManager>().sanity * 0.01f;
 
         ambience.GetComponent<AudioSource>().volume = 0.25f * (1f - sanity); // The background ambience is louder the lower sanity you have
 
 
 
-        burtDrums.transform.position = player.transform.position + new Vector3(0f, insanityRandomize(Vector3.Distance(player.transform.position, burt.transform.position), 1f, 16f), 0f);
+        burtDrums.transform.position = player.transform.position + new Vector3(0f, insanityRandomize(Vector3.Distance(player.transform.position, burt.transform.position), 1f, 1f), 0f);
         // The war drums are placed at a point the same distance from the player as burt, but directly above the player's head
         //This was done because if I had attached the audio source to Burt, it would become directional and I didn't want that.
 
@@ -49,13 +50,13 @@ public class DynamicSoundtrackManager : MonoBehaviour
     float insanityRandomize(float intake, float offset)
     {
         // This takes an input float 0-1 and outputs a float 0-1 that is more random the lower sanity you have
-        return (intake * sanity) + (Mathf.PerlinNoise(Time.time * 0.1f, offset * 10f) * (1 - sanity));
+        return (intake * sanity) + (Mathf.PerlinNoise(Time.time * 0.1f, offset * 10f) * (1f - sanity));
     }
 
     float insanityRandomize(float intake, float offset, float multiplier)
     {
         // This takes an input float 0-1 and outputs a float 0-1 that is more random the lower sanity you have
-        return (intake * sanity) + (Mathf.PerlinNoise(Time.time * 0.1f, offset * 10f) * (1 - sanity) * multiplier);
+        return (intake * sanity) + (Mathf.PerlinNoise(Time.time * 0.1f, offset * 10f) * (1f - sanity) * multiplier);
     }
 
 
