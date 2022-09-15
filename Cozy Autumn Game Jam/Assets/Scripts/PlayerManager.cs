@@ -18,6 +18,6 @@ public class PlayerManager : MonoBehaviour
 	
 	public GameObject player; // Allows other scripts to find the player with PlayerManager.instance.player
 	public GameObject burt; // Allows other scripts to find Burt with PlayerManager.instance.burt
-	public float sanity = 1f; // This is the player's sanity; I put it here because so many systems will use it
+	public float sanity = 100f; // This is the player's sanity; I put it here because so many systems will use it
 	
 }

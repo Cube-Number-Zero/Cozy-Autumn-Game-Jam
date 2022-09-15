@@ -27,7 +27,37 @@ namespace StarterAssets
         {
             starterAssetsInputs.SprintInput(virtualSprintState);
         }
-        
+
+        public void VirtualSneakInput(bool virtualSneakState)
+        {
+            starterAssetsInputs.SneakInput(virtualSneakState);
+        }
+
+        public void VirtualInventoryInput(bool virtualInventoryState)
+        {
+            starterAssetsInputs.InventoryInput(virtualInventoryState);
+        }
+
+        public void VirtualInteractLInput(bool virtualInteractLState)
+        {
+            starterAssetsInputs.InteractLInput(virtualInteractLState);
+        }
+
+        public void VirtualInteractRInput(bool virtualInteractRState)
+        {
+            starterAssetsInputs.InteractRInput(virtualInteractRState);
+        }
+
+        public void VirtualUseLInput(bool virtualUseLState)
+        {
+            starterAssetsInputs.UseLInput(virtualUseLState);
+        }
+
+        public void VirtualUseRInput(bool virtualUseRState)
+        {
+            starterAssetsInputs.UseRInput(virtualUseRState);
+        }
+
     }
 
 }

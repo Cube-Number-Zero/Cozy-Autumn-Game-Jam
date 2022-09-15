@@ -16,11 +16,13 @@ namespace StarterAssets
 		[Tooltip("Move speed of the character in m/s")]
 		public float MoveSpeed = 4.0f;
 		[Tooltip("Sprint speed of the character in m/s")]
-		public float SprintSpeed = 6.0f;
+		public float SprintSpeed = 7.5f;
 		[Tooltip("Rotation speed of the character")]
 		public float RotationSpeed = 1.0f;
 		[Tooltip("Acceleration and deceleration")]
 		public float SpeedChangeRate = 10.0f;
+		[Tooltip("Move speed of the character in m/s while sneaking")]
+		public float SneakSpeed = 1.75f;
 
 		[Space(10)]
 		[Tooltip("The height the player can jump")]
@@ -65,13 +67,16 @@ namespace StarterAssets
 		private float _jumpTimeoutDelta;
 		private float _fallTimeoutDelta;
 
-	
+		// misc
+		public bool inventoryOpen = false;
+
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 		private PlayerInput _playerInput;
 #endif
 		private CharacterController _controller;
 		private StarterAssetsInputs _input;
 		private GameObject _mainCamera;
+		private InteractionController _interactions;
 
 		private const float _threshold = 0.01f;
 
@@ -100,6 +105,7 @@ namespace StarterAssets
 		{
 			_controller = GetComponent<CharacterController>();
 			_input = GetComponent<StarterAssetsInputs>();
+			_interactions = GetComponent<InteractionController>();
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 			_playerInput = GetComponent<PlayerInput>();
 #else
@@ -116,6 +122,7 @@ namespace StarterAssets
 			JumpAndGravity();
 			GroundedCheck();
 			Move();
+			openInventory();
 		}
 
 		private void LateUpdate()
@@ -154,8 +161,12 @@ namespace StarterAssets
 
 		private void Move()
 		{
-			// set target speed based on move speed, sprint speed and if sprint is pressed
-			float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
+			// set target speed to move speed by default, and instead use SneakSpeed or SprintSpeed if the player is Sneaking or Sprinting
+			float targetSpeed = MoveSpeed;
+			if (_input.sprint)
+				targetSpeed = SprintSpeed;
+			else if (_input.sneak)
+				targetSpeed = SneakSpeed;
 
 			// a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
@@ -265,5 +276,14 @@ namespace StarterAssets
 			// when selected, draw a gizmo in the position of, and matching radius of, the grounded collider
 			Gizmos.DrawSphere(new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z), GroundedRadius);
 		}
-	}
+
+		private void openInventory()
+		{
+			if(_input.inventory) // If the player presses the button to open the inventory, ...
+			{
+                _input.inventory = false; // Reset the button's input back to false so everything else here is only done once
+				inventoryOpen = !inventoryOpen; // Toggle whether or not the inventory is open
+            }
+		}
+    }
 }

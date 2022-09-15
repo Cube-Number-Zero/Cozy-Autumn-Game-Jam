@@ -5,44 +5,85 @@ using UnityEngine.AI;
 
 public class BurtController : MonoBehaviour
 {
-	
-	public bool isPlayerVisible = false;
-	
+	#region AI CONTROL PARAMETERS
+
+	// These variables change certain aspects about Burt's AI!
+	// Change them as much as you want to help balance the game
+	// Note: these values aren't percentages. Setting them to 100 will multiply their default values by 100x
+	[Header("AI Control Parameters!")]
+    [Tooltip("How quickly Burt targets the player after seeing him")]
+    public float burtVisionCertaintyGrowth = 0.1f;
+	[Tooltip("How quickly Burt will forget about seeing the player")]
+	public float burtVisionCertaintyDecay = 0.05f;
+	[Tooltip("How quickly being near Burt will decay the player's sanity")]
+	public float burtProximitySanityDecay = 1f;
+	[Tooltip("How aggresive Burt is when sanity is full")]
+	public float baseAggression = 0.3f;
+
+	#endregion
+
+	[Header("Tweakable Parameters")]
+    [Tooltip("How sharp Burt is able to turn, before burt's frustration system affects it")]
+    public float flightTurningSpeed = 1f;
+	[Tooltip("How quickly Burt flies")]
+    public float flightSpeed = 10f;
+	[Tooltip("How quickly Burt improves his turning ability if he can't get to the target. Also affects how quickly Burt will teleport to his target")]
+    public float frustrationGrowthRate = 0.01f; // The base rate at which Burt's frustration will grow, note that Burt's frustration is compounding; this just gives the frustration a kick to start the system
+	[Tooltip("This affects how close Burt is willing to fly to a wall before he turns around.")]
+    public float obstacleAvoidingSightRadius = 5f; // How far Burt can see when trying not to fly into walls
+	[Tooltip("This affects how large a hole needs to be for Burt to think he can fly through it")]
+    public float obstacleAvoidingSpherecastRadius = 1f;
+
+	[Header("Don't change these in the inspector")]
+    public bool isPlayerVisible = false;
 	public Vector3 flightDirectionToTarget;
-
 	public Vector3 currentFlightDirection = new Vector3(1f, 0f, 0f);
-
-	public float flightTurningSpeed = 1f;
-
-	public float flightSpeed = 10f;
-
 	public float targetOrbitFrustration = 1f; // This will make Burt better at turning the longer he spends moving away from the target; implemented to prevent "orbiting" behavior
+	public float seenPlayerCertainty = 0f;
+	private float lastTargetDistance = 0f;
+    public float burtAggressionGeneral = 1f;
+	public Vector3 lastSeenPlayerLoc = new Vector3(0f, 0f, 0f);
 
-	public float frustrationGrowthRate = 0.01f; // The base rate at which Burt's frustration will grow, note that Burt's frustration is compounding; this just gives the frustration a kick to start the system
 
-	private float lastTargetDistance = 0;
 
-	public float obstacleAvoidingSightRadius = 5; // How far Burt can see when trying not to fly into walls
-
-	public float obstacleAvoidingSpherecastRadius = 1;
-	
-	Transform target;
+    Transform target;
 	Transform player;
+	PlayerManager pmanager;
 
     void Start()
     {
 		
 		target = GameObject.Find("BurtFlightTarget").transform; // allows BurtFlightTarget to be referenced at any time with "target"
 		player = GameObject.Find("PlayerCapsule").transform; // allows PlayerCapsule to be referenced at any time with "player"
+		pmanager = GameObject.Find("GameManager").GetComponent<PlayerManager>();
 
     }
 
     void Update()
     {
+		burtAggressionGeneral = (1f - pmanager.sanity) * (1f - baseAggression) + baseAggression;
+		if(CanSeePlayer()) // Tests if Burt has line of sight to the player
+		{
+			lastSeenPlayerLoc = player.position;
+			seenPlayerCertainty += seenPlayerCertainty + burtVisionCertaintyGrowth * Time.deltaTime > 1f ? 1f - seenPlayerCertainty : burtVisionCertaintyGrowth * Time.deltaTime;
+			isPlayerVisible = true;
+		}
+		else
+		{
+			isPlayerVisible = false;
+			seenPlayerCertainty -= seenPlayerCertainty - burtVisionCertaintyDecay * Time.deltaTime < 0f ? seenPlayerCertainty : burtVisionCertaintyDecay * Time.deltaTime;
+		}
 
-		isPlayerVisible = CanSeePlayer();
+		if(seenPlayerCertainty > 0)
+		{
+            Vector3 playerTargetOffset = (lastSeenPlayerLoc - target.position); // Where the player is in relation to the target
+            playerTargetOffset.y *= 0.5f;
+            target.position += playerTargetOffset.normalized * Time.deltaTime * seenPlayerCertainty * Mathf.Pow(burtAggressionGeneral, 2) * 16f;
+        }
 
-		flyTowardsTarget();
+		float sanityRemoved = burtProximitySanityDecay / Mathf.Pow(Vector3.Distance(transform.position, player.position), 3f) * Time.deltaTime;
+        pmanager.sanity -= pmanager.sanity <= sanityRemoved ? pmanager.sanity : sanityRemoved;
+        flyTowardsTarget();
 
     }
 
@@ -63,11 +104,15 @@ public class BurtController : MonoBehaviour
 		currentFlightDirection = originalDirection + howMuchDidBurtJustTurn;
         currentFlightDirection = currentFlightDirection.normalized; // Normalize to avoid Burt speeding up or slowing down...again
 
-		if(targetOrbitFrustration > 250)
+		if(targetOrbitFrustration > 250f)
 		{
 			currentFlightDirection = flightDirectionToTarget;
-		}	
-		if (Physics.SphereCast(transform.position, obstacleAvoidingSpherecastRadius, currentFlightDirection, out RaycastHit hit, obstacleAvoidingSightRadius))
+		}
+        if (targetOrbitFrustration > 1000f && !isPlayerVisible)
+        {
+			transform.position = target.position;
+        }
+        if (Physics.SphereCast(transform.position, obstacleAvoidingSpherecastRadius, currentFlightDirection, out RaycastHit hit, obstacleAvoidingSightRadius))
 		{
 			DontHitWalls();
 		}
