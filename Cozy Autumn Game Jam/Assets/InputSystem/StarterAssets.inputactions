@@ -94,6 +94,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Help",
+                    "type": "Button",
+                    "id": "d920b1aa-c063-4df4-b7f9-4f4f79591e4a",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -385,17 +394,6 @@
                 },
                 {
                     "name": "",
-                    "id": "96b0f77f-bd5e-44d4-a1b3-9623a5bbf2c9",
-                    "path": "<Gamepad>/select",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "Inventory",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "76d8b988-a85e-44f4-b8dc-ed412fff460d",
                     "path": "<Keyboard>/ctrl",
                     "interactions": "",
@@ -446,6 +444,28 @@
                     "processors": "",
                     "groups": "KeyboardMouse",
                     "action": "UseL",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f3c90424-3f3e-48e3-aba6-86a91687fb48",
+                    "path": "<Keyboard>/h",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "Help",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "482b7d26-ed3f-4916-88e4-94544563e2a2",
+                    "path": "<Gamepad>/select",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Help",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

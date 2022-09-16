@@ -119,7 +119,7 @@ namespace StarterAssets
 			JumpAndGravity();
 			GroundedCheck();
 			Move();
-			openInventory();
+			openMenus();
 		}
 
 		private void LateUpdate()
@@ -274,13 +274,19 @@ namespace StarterAssets
 			Gizmos.DrawSphere(new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z), GroundedRadius);
 		}
 
-		private void openInventory()
+		private void openMenus()
 		{
 			if(_input.inventory) // If the player presses the button to open the inventory, ...
 			{
                 _input.inventory = false; // Reset the button's input back to false so everything else here is only done once
 				_interactions.inventoryOpen = !_interactions.inventoryOpen; // Toggle whether or not the inventory is open
             }
-		}
+			// Same thing, but with the help menu
+            if (_input.helpMenu)
+            {
+                _input.helpMenu = false;
+                _interactions.helpMenuOpen = !_interactions.helpMenuOpen;
+            }
+        }
     }
 }

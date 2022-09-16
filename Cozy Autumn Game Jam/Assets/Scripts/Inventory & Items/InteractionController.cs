@@ -18,6 +18,7 @@ namespace StarterAssets
 
         private StarterAssetsInputs inputs;
 
+        public bool helpMenuOpen = false;
         public bool inventoryOpen = false;
         public bool isLookingAtItem = false;
 

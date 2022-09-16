@@ -10,6 +10,7 @@ namespace StarterAssets
 		[Header("Character Input Values")]
 		public Vector2 move;
 		public Vector2 look;
+		[HideInInspector]
 		public bool jump;
 		public bool sprint;
 
@@ -22,11 +23,18 @@ namespace StarterAssets
 
 		[Header("Added things")]
         public bool sneak;
+        [HideInInspector]
         public bool inventory;
+        [HideInInspector]
 		public bool interactL;
+        [HideInInspector]
 		public bool interactR;
+        [HideInInspector]
 		public bool useL;
+        [HideInInspector]
 		public bool useR;
+        [HideInInspector]
+		public bool helpMenu;
 
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 		public void OnMove(InputValue value)
@@ -79,6 +87,11 @@ namespace StarterAssets
 		{
 			UseRInput(value.isPressed);
 		}
+
+		public void OnHelp(InputValue value)
+		{
+			HelpInput(value.isPressed);
+		}
 #endif
 
 
@@ -129,6 +142,11 @@ namespace StarterAssets
         {
             useR = newUseRState;
         }
+
+		public void HelpInput(bool newHelpState)
+		{
+			helpMenu = newHelpState;
+		}
 
 
         private void OnApplicationFocus(bool hasFocus)

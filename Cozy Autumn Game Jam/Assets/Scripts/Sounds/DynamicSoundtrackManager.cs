@@ -59,9 +59,6 @@ public class DynamicSoundtrackManager : MonoBehaviour
         return (intake * sanity) + (Mathf.PerlinNoise(Time.time * 0.1f, offset * 10f) * (1f - sanity) * multiplier);
     }
 
-
-
-
     float applyLowPassToDrums(float intake)
     {
         // Math for converting the certainty into a frequency in hertz
