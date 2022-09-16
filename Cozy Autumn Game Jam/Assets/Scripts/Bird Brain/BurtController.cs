@@ -12,14 +12,14 @@ public class BurtController : MonoBehaviour
 	// Note: these values aren't percentages. Setting them to 100 will multiply their default values by 100x
 	[Header("AI Control Parameters!")]
     [Tooltip("How quickly Burt targets the player after seeing him")]
-    public float burtVisionCertaintyGrowth = 0.1f;
+    public float burtVisionCertaintyGrowth = 0.01f;
 	[Tooltip("How quickly Burt will forget about seeing the player")]
-	public float burtVisionCertaintyDecay = 0.05f;
+	public float burtVisionCertaintyDecay = 0.005f;
 	[Tooltip("How quickly being near Burt will decay the player's sanity")]
 	public float burtProximitySanityDecay = 1f;
 	[Tooltip("How aggresive Burt is when sanity is full")]
 	[Range(0f, 1f)]
-	public float baseAggression = 0.3f;
+	public float baseAggression = 0.5f;
 
 	#endregion
 
@@ -87,7 +87,7 @@ public class BurtController : MonoBehaviour
             target.position += playerTargetOffset.normalized * Time.deltaTime * seenPlayerCertainty * Mathf.Pow(burtAggressionGeneral, 2) * 16f; // Move the target towards the last seen position of the player
         }
 
-		float sanityRemoved = burtProximitySanityDecay / Mathf.Pow(Vector3.Distance(transform.position, player.position), 3f) * Time.deltaTime; // Reduce the player's sanity if they're near Burt
+		float sanityRemoved = burtProximitySanityDecay / Mathf.Pow(Vector3.Distance(transform.position, player.position), 3f) * Time.deltaTime * 100f; // Reduce the player's sanity if they're near Burt
         pmanager.sanity -= pmanager.sanity <= sanityRemoved ? pmanager.sanity : sanityRemoved;
         flyTowardsTarget();
 
@@ -110,13 +110,17 @@ public class BurtController : MonoBehaviour
 		currentFlightDirection = originalDirection + howMuchDidBurtJustTurn;
         currentFlightDirection = currentFlightDirection.normalized; // Normalize to avoid Burt speeding up or slowing down...again
 
-		if(targetOrbitFrustration > 250f)
+		if(targetOrbitFrustration > 250f) // Burt's really mad he can't get to the target, and now doesn't bother turning smoothly at all. He's out for blood. BurtFlightTarget.blood
 		{
 			currentFlightDirection = flightDirectionToTarget;
 		}
-        if (targetOrbitFrustration > 1000f && !isPlayerVisible)
+        if (targetOrbitFrustration > 1000f) // Burt's probably stuck. If the player won't notice, teleport Burt to the target.
         {
-			transform.position = target.position;
+			if (!(isPlayerVisible // If neither Burt can see the player (and thus the player can see Burt)
+				|| CanSeePlayer(target.position) // Nor could Burt see the player from the target (and thus the player could see Burt at the target)
+				|| Vector3.Distance(player.position, target.position) < 48 // Nor is the target is too close to the player
+				|| Vector3.Distance(player.position, transform.position) < 16)) // Nor is Burt too close (Note that this is more lenient. It's no fun if Burt teleports next to you, but it is if he suddenly teleports away) 
+				transform.position = target.position; // Then just teleport Burt to the target
         }
         if (Physics.SphereCast(transform.position, obstacleAvoidingSpherecastRadius, currentFlightDirection, out RaycastHit hit, obstacleAvoidingSightRadius))
 		{
@@ -213,7 +217,7 @@ public class BurtController : MonoBehaviour
         currentFlightDirection = bestDir;
 	}
 
-    bool CanSeePlayer ()
+    public bool CanSeePlayer ()
 	{
 		Vector3 raycastDir = new Vector3(0f, 0.5f, 0f) + player.position - transform.position; // get the direction Burt needs to look in to see the player
 		var ray = new Ray(transform.position, raycastDir); // look in the direction of the player with a raycast
@@ -227,8 +231,24 @@ public class BurtController : MonoBehaviour
 			return false; // return false if the raycast never saw anything at all
 		}
 	}
-	
-	void OnDrawGizmosSelected ()
+
+    public bool CanSeePlayer(Vector3 eyeLocation)
+    {
+		// If you supply CanSeePlayer with a Vector3 parameter, the function will test from that location instead of Burt's
+        Vector3 raycastDir = new Vector3(0f, 0.5f, 0f) + player.position - eyeLocation;
+        var ray = new Ray(eyeLocation, raycastDir);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit))
+        {
+            return (hit.transform.name == "Capsule_Player");
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    void OnDrawGizmosSelected ()
 	{
 		//Gizmos.color = Color.red;
 		//Gizmos.DrawWireSphere(raycasthitpos, 1f);
