@@ -27,13 +27,13 @@ public class TriggerTest : MonoBehaviour
     public void OnTriggerEnter(Collider other)
     {
         Debug.Log("Player has entered Trigger");
-        isInTrigger = true;
+        PlayerManager.inCabin = true;
     }
 
     public void OnTriggerExit(Collider other)
     {
         Debug.Log("Player has exited Trigger");
-        isInTrigger = false;
+        PlayerManager.inCabin = false;
     }
 
 }

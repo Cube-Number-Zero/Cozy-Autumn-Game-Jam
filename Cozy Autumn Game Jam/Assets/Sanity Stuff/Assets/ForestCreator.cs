@@ -7,7 +7,8 @@ public class ForestCreator : MonoBehaviour
     public GameObject Forest;
     public GameObject forestPrefab;
     public GameObject forestPrefab2;
-    public float randNum;
+    [Range(0, 10)]
+    public int randNum;
 
 
 
@@ -19,7 +20,7 @@ public class ForestCreator : MonoBehaviour
 
     void Start()
     { 
-        forestPrefab = Instantiate(Forest, new Vector3(0, 0, 0), Quaternion.identity);
+        forestPrefab = Instantiate(Forest, new Vector3(0f, 0f, 0f), Quaternion.identity);
         forestDestroyerScript = forestPrefab.GetComponent<ForestDestroyer>();
     }
 
@@ -28,7 +29,7 @@ public class ForestCreator : MonoBehaviour
     {
         if (forestDestroyerScript.changeForest == true && randNum == 3)
         {
-            Instantiate(forestPrefab2, new Vector3(0, 0, 0), Quaternion.identity);
+            Instantiate(forestPrefab2, new Vector3(0f, 0f, 0f), Quaternion.identity);
             forestDestroyerScript.changeForest = false;
         }
 

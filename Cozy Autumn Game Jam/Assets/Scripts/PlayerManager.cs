@@ -16,9 +16,13 @@ public class PlayerManager : MonoBehaviour
 	
 	#endregion
 	
-	public GameObject player; // Allows other scripts to find the player with PlayerManager.instance.player
-	public GameObject burt; // Allows other scripts to find Burt with PlayerManager.instance.burt
-	[Range(0f, 100f)]
-	public float sanity = 100f; // This is the player's sanity; I put it here because so many systems will use it
-	
+	public static GameObject player; // Allows other scripts to find the player with PlayerManager.instance.player
+	public static GameObject burt; // Allows other scripts to find Burt with PlayerManager.instance.burt
+	public static bool inCabin = true;
+
+	void Start()
+	{
+		player = GameObject.Find("PlayerCapsule");
+        player = GameObject.Find("Burt");
+    }
 }

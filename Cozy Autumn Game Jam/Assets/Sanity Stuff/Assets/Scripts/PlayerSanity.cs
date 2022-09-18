@@ -16,14 +16,15 @@ public class PlayerSanity : MonoBehaviour
 
     public SanityBar sanityBar;
 
-
-    public float sanityLevel = 100;
+    [Range(0f, 100f)]
+    public static float sanityLevel = 100f;
     public float changePerSecond;
-    public bool subtractionPossible;
-    public bool additionPossible = true;
-   
+    public bool subtractionPossible = true;
+    public bool additionPossible = false;
+
     //Sanity Events
-    public float randNum;
+    [Range(1, 10)]
+    public int randNum;
    
     //Checks to see if threshold between sanities has been met
     public bool doSanityEvent = false;
@@ -33,7 +34,7 @@ public class PlayerSanity : MonoBehaviour
     
    
     //Used to calculate how long inbetween events (Broken in code, use inspector to change value)
-    public float eventWaitTimer = 5;
+    public float eventWaitTimer = 5f;
    
     //Used specifically for how long an event lasts
     public float eventTimer;
@@ -76,34 +77,30 @@ public class PlayerSanity : MonoBehaviour
         }
 
 
-        if (doSanityEvent == true && eventWaitTimer <= 0)
+        if (doSanityEvent && eventWaitTimer <= 0f)
         {
             RandomGenerate();
-            eventWaitTimer += 5;
+            eventWaitTimer = 5f;
             doSanityEvent = false;
             
         }
 
-        if (bushrotatescene == true)
+        if (bushrotatescene)
         {
-            if (eventTimer > 0)
+            if (eventTimer > 0f)
             {
                 eventTimer -= changePerSecond * Time.deltaTime;
             }
-
-            if (eventTimer <= 0 && eventTimeGenerated == false)
+            else
             {
-                randomEventTime();
-                eventTimeGenerated = true;
-            }
-
-            
-            if (eventTimer <= 0)
-            {
+                if(!eventTimeGenerated)
+                {
+                    randomEventTime();
+                    eventTimeGenerated = true;
+                }
                 bushrotatescene = false;
                 eventTimeGenerated = false;
             }
-            
         }
 
 
@@ -112,44 +109,26 @@ public class PlayerSanity : MonoBehaviour
 
 
         // Checks sanity level and determines if it is possible to either add or subtract sanity
-        if (sanityLevel < 0)
-        {
-            subtractionPossible = false;
-        }   else
-        {
-            subtractionPossible = true;
-        }
-
-
-        if (sanityLevel > 100)
-        {
-            additionPossible = false;
-        } else
-        {
-            additionPossible = true;
-        }
+        subtractionPossible = (sanityLevel > 0f);
+        additionPossible = (sanityLevel < 100f);
 
 
         //Checks if player is in or out of trigger and does the appropriate action to sanity
 
-        if (playerTriggerTest.isInTrigger == true && additionPossible == true)
+        if (playerTriggerTest.isInTrigger && additionPossible)
         {
             sanityLevel += changePerSecond * Time.deltaTime;
             
         }
 
-
-
-
-        if (playerTriggerTest.isInTrigger == false && subtractionPossible == true)
+        if (!playerTriggerTest.isInTrigger && subtractionPossible)
         {
             sanityLevel -= changePerSecond * Time.deltaTime;
-            
         }
 
 
-        //Sanity UI
 
+        //Sanity UI
         sanityBar.SetSanity(sanityLevel);
 
 

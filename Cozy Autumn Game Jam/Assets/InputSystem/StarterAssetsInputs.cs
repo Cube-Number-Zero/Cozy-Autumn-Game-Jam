@@ -15,7 +15,7 @@ namespace StarterAssets
 		public bool sprint;
 
 		[Header("Movement Settings")]
-		public bool analogMovement;
+		public static bool analogMovement;
 
 		[Header("Mouse Cursor Settings")]
 		public bool cursorLocked = true;

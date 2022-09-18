@@ -53,20 +53,18 @@ public class BurtController : MonoBehaviour
 
     Transform target;
 	Transform player;
-	PlayerManager pmanager;
 
     void Start()
     {
 		
 		target = GameObject.Find("BurtFlightTarget").transform; // allows BurtFlightTarget to be referenced at any time with "target"
 		player = GameObject.Find("PlayerCapsule").transform; // allows PlayerCapsule to be referenced at any time with "player"
-		pmanager = GameObject.Find("GameManager").GetComponent<PlayerManager>();
 
     }
 
     void Update()
     {
-		burtAggressionGeneral = (1f - pmanager.sanity * 0.01f) * (1f - baseAggression) + baseAggression;
+		burtAggressionGeneral = (1f - PlayerSanity.sanityLevel * 0.01f) * (1f - baseAggression) + baseAggression;
 		if(CanSeePlayer()) // Tests if Burt has line of sight to the player
 		{
 			lastSeenPlayerLoc = player.position; // Marks the location of the player as lastSeenPlayerLoc
@@ -88,7 +86,7 @@ public class BurtController : MonoBehaviour
         }
 
 		float sanityRemoved = burtProximitySanityDecay / Mathf.Pow(Vector3.Distance(transform.position, player.position), 3f) * Time.deltaTime * 100f; // Reduce the player's sanity if they're near Burt
-        pmanager.sanity -= pmanager.sanity <= sanityRemoved ? pmanager.sanity : sanityRemoved;
+        PlayerSanity.sanityLevel -= PlayerSanity.sanityLevel <= sanityRemoved ? PlayerSanity.sanityLevel : sanityRemoved;
         flyTowardsTarget();
 
     }

@@ -12,8 +12,6 @@ namespace StarterAssets
         public enum itemID { Toy, Stone, Loudtoy, Wood, NoneR, NoneL, NoneB };
 
 
-        public InteractionController interactionController;
-        public PlayerManager manager;
         private bool usingController = false;
 
         #region initializing text components
@@ -33,8 +31,6 @@ namespace StarterAssets
 
         void Start()
         {
-            manager = GameObject.Find("GameManager").GetComponent<PlayerManager>();
-            interactionController = GameObject.Find("PlayerCapsule").GetComponent<InteractionController>();
 
             #region assigning text components
             leftCornerControls = GameObject.Find("leftCornerControls").GetComponent<TextMeshProUGUI>();
@@ -49,15 +45,13 @@ namespace StarterAssets
             helpTextL = GameObject.Find("helpMenuTextLeft").GetComponent<TextMeshProUGUI>();
             #endregion
 
-            //bg = GameObject.Find("UIBackground");
-
 
         }
 
         void Update()
         {
-            usingController = manager.player.GetComponent<StarterAssetsInputs>().analogMovement;
-            if (interactionController.inventoryOpen)
+            usingController = StarterAssetsInputs.analogMovement;
+            if (InteractionController.inventoryOpen)
             {
                 bg.SetActive(true);
 
@@ -65,14 +59,14 @@ namespace StarterAssets
                 rightCornerControls.text = usingController ? "[LEFT/RIGHT TRIGGER] drop item" : "[LEFT/RIGHT CLICK] drop item";
                 leftHandItemName.text = getNameFromID(getIDForItemL());
                 rightHandItemName.text = getNameFromID(getIDForItemR());
-                bagItemName.text = interactionController.hasBag ? getNameFromID(getIDForItemB()) : "";
+                bagItemName.text = InteractionController.hasBag ? getNameFromID(getIDForItemB()) : "";
                 leftHandItemDesc.text = getDescFromID(getIDForItemL());
                 rightHandItemDesc.text = getDescFromID(getIDForItemR());
-                bagItemDesc.text = interactionController.hasBag ? getDescFromID(getIDForItemB()) : "";
+                bagItemDesc.text = InteractionController.hasBag ? getDescFromID(getIDForItemB()) : "";
                 helpTextR.text = "";
                 helpTextL.text = "";
             }
-            else if (interactionController.helpMenuOpen)
+            else if (InteractionController.helpMenuOpen)
             {
                 bg.SetActive(true);
 
@@ -133,13 +127,13 @@ Made in 14 days for the Cozy Autumn Game Jam";
                 bagItemDesc.text = "";
                 helpTextR.text = "";
                 helpTextL.text = "";
-                if (interactionController.isLookingAtItem)
+                if (InteractionController.isLookingAtItem)
                 {
-                    if (interactionController.leftHandItem.type == "NONE" && interactionController.rightHandItem.type == "NONE")
+                    if (InteractionController.leftHandItem.type == "NONE" && InteractionController.rightHandItem.type == "NONE")
                         rightCornerControls.text = "[Q/E] pick up";
-                    else if (interactionController.leftHandItem.type == "NONE")
+                    else if (InteractionController.leftHandItem.type == "NONE")
                         rightCornerControls.text = "[Q] pick up";
-                    else if (interactionController.rightHandItem.type == "NONE")
+                    else if (InteractionController.rightHandItem.type == "NONE")
                         rightCornerControls.text = "[E] pick up";
                     else
                         rightCornerControls.text = "hands full";
@@ -168,27 +162,27 @@ Made in 14 days for the Cozy Autumn Game Jam";
         {
             switch (ID)
             {
-                case itemID.Toy:     return "A piece of your beloved toy. Bring it back\nto the cabin\nto attach it.";
-                case itemID.Stone:   return "A stone. Using it will throw it.";
+                case itemID.Toy: return "A piece of your beloved toy. Bring it back\nto the cabin\nto attach it.";
+                case itemID.Stone: return "A stone. Using it will throw it.";
                 case itemID.Loudtoy: return "A toy that makes quite a racket. Use it to turn it on and drop it.";
-                case itemID.Wood:    return "Some twigs that can be used for firewood. Bring them back to the cabin to place\nin the fire.";
-                case itemID.NoneR:   return "Your right hand is empty.";
-                case itemID.NoneL:   return "Your left hand is empty.";
-                case itemID.NoneB:   return "Your bag is empty.";
+                case itemID.Wood: return "Some twigs that can be used for firewood. Bring them back to the cabin to place\nin the fire.";
+                case itemID.NoneR: return "Your right hand is empty.";
+                case itemID.NoneL: return "Your left hand is empty.";
+                case itemID.NoneB: return "Your bag is empty.";
             }
             return null;
         }
 
         itemID getIDForItemL()
         {
-            switch(interactionController.leftHandItem.type)
+            switch (InteractionController.leftHandItem.type)
             {
-                case "TOY1":    return itemID.Toy;
-                case "TOY2":    return itemID.Toy;
-                case "STONE":   return itemID.Stone;
+                case "TOY1": return itemID.Toy;
+                case "TOY2": return itemID.Toy;
+                case "STONE": return itemID.Stone;
                 case "LOUDTOY": return itemID.Loudtoy;
-                case "WOOD":    return itemID.Wood;
-                case "NONE":    return itemID.NoneL;
+                case "WOOD": return itemID.Wood;
+                case "NONE": return itemID.NoneL;
             }
             Debug.Log("WARNING: NO ITEM DETECTED IN LEFT HAND  -UIController");
             return itemID.Toy;
@@ -196,7 +190,7 @@ Made in 14 days for the Cozy Autumn Game Jam";
 
         itemID getIDForItemR()
         {
-            switch (interactionController.rightHandItem.type)
+            switch (InteractionController.rightHandItem.type)
             {
                 case "TOY1": return itemID.Toy;
                 case "TOY2": return itemID.Toy;
@@ -211,7 +205,7 @@ Made in 14 days for the Cozy Autumn Game Jam";
 
         itemID getIDForItemB()
         {
-            switch (interactionController.bagItem.type)
+            switch (InteractionController.bagItem.type)
             {
                 case "TOY1": return itemID.Toy;
                 case "TOY2": return itemID.Toy;
@@ -224,5 +218,4 @@ Made in 14 days for the Cozy Autumn Game Jam";
             return itemID.Toy;
         }
     }
-
 }

@@ -11,19 +11,18 @@ public class ForestDestroyer : MonoBehaviour
 
 
     //Create Cooldown
-    public float coolDown = 30;
+    public float coolDown = 30f;
 
     public bool numGenerated = false;
-    public float randNum;
+    [Range(0, 10)]
+    public int randNum;
 
 
     public bool changeForest = false;
 
 
     //Timer
-    public float changePerSec = 0;
-
-    public float testNumber = 0;
+    public float changePerSec = 0f;
 
 
     
@@ -36,11 +35,11 @@ public class ForestDestroyer : MonoBehaviour
     void Update()
     {
         //Checks to see if player is in trigger, then Generates random number once
-        if (triggerTestScript.isInTrigger == true && numGenerated == false && coolDown <= 0)
+        if (triggerTestScript.isInTrigger == true && numGenerated == false && coolDown <= 0f)
         {
             RandomChance();
             numGenerated = true;
-            coolDown += 30;
+            coolDown += 30f;
         }
 
 
@@ -58,7 +57,7 @@ public class ForestDestroyer : MonoBehaviour
      
         }
 
-        if (coolDown >= 0)
+        if (coolDown >= 0f)
         {
             TreeClock();
         }

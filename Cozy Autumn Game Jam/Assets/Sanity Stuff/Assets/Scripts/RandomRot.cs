@@ -15,17 +15,17 @@ public class RandomRot : MonoBehaviour
     {
        playerSanityScript = GameObject.Find("PlayerCapsule").GetComponent<PlayerSanity>();
 
-        randy = Random.Range(0, 100);
-        transform.Rotate(new Vector3(0, randy, 0));
+        randy = Random.Range(0f, 100f);
+        transform.Rotate(new Vector3(0f, randy, 0f));
     }
 
     // Update is called once per frame
     void Update()
     {
 
-        if (playerSanityScript.bushrotatescene == true)
+        if (playerSanityScript.bushrotatescene)
         {
-            transform.Rotate(new Vector3(0, 1, 0));
+            transform.Rotate(new Vector3(0f, 1f, 0f));
         }
 
 

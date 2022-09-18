@@ -10,7 +10,7 @@ public class FoliageRandomizer : MonoBehaviour
     float randz;
     bool posGrabbed = false;
     int bushesCreated = 0;
-    public float simChange = 0;
+    public bool simChange = false;
 
     public GameObject Bush;
     
@@ -36,7 +36,7 @@ public class FoliageRandomizer : MonoBehaviour
         }
 
 
-        if (simChange == 1)
+        if (simChange)
         {
             GetRandomPos();
            

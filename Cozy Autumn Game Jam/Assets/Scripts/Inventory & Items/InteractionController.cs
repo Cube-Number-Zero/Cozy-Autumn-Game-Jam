@@ -8,19 +8,19 @@ namespace StarterAssets
     public class InteractionController : MonoBehaviour
     {
 
-        public bool hasBag = false;
+        public static bool hasBag = false;
 
         private static Item emptyItem;
 
-        public Item leftHandItem;
-        public Item rightHandItem;
-        public Item bagItem;
+        public static Item leftHandItem;
+        public static Item rightHandItem;
+        public static Item bagItem;
 
         private StarterAssetsInputs inputs;
 
-        public bool helpMenuOpen = false;
-        public bool inventoryOpen = false;
-        public bool isLookingAtItem = false;
+        public static bool helpMenuOpen = false;
+        public static bool inventoryOpen = false;
+        public static bool isLookingAtItem = false;
 
         public GameObject playerVisionTarget;
 
