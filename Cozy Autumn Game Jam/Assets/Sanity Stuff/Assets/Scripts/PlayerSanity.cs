@@ -70,7 +70,7 @@ public class PlayerSanity : MonoBehaviour
     {
         //Procecss Sanity Events
 
-     if (sanityLevel > 70 && sanityLevel < 90)
+     if (sanityLevel > 0 && sanityLevel < 90)
         {
             doSanityEvent = true;
             eventWaitTimer -= changePerSecond * Time.deltaTime;
