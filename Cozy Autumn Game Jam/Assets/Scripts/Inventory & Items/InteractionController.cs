@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using System.Diagnostics;
+
+using Debug = UnityEngine.Debug;
 
 namespace StarterAssets
 {
@@ -18,6 +21,8 @@ namespace StarterAssets
 
         private StarterAssetsInputs inputs;
 
+        public Item inactiveRock;
+
         public static bool helpMenuOpen = false;
         public static bool inventoryOpen = false;
         public static bool isLookingAtItem = false;
@@ -26,10 +31,23 @@ namespace StarterAssets
 
         public enum side {Left, Right};
 
+        [Header("Prefabs")]
+        public GameObject prefab_activeDistractionToy;
+        public GameObject prefab_activeStone;
+        public GameObject prefab_distractionToy;
+        public GameObject prefab_firewood;
+        public GameObject prefab_stone;
+        public GameObject prefab_toyPiece1;
+        public GameObject prefab_toyPiece2;
+
+
+
+
         void Start()
         {
             emptyItem = ScriptableObject.CreateInstance<Item>(); // Establishing a permanent emptyItem to use when a spot in the player's inventory is freed up
-            AssetDatabase.CreateAsset(emptyItem, "Assets/Items/blankItem.asset");
+            
+            AssetDatabase.CreateAsset(emptyItem, "Assets/Scripts/Inventory & Items/Items/blankItem.asset");
 
             emptyItem.type = "NONE";
 
@@ -73,11 +91,13 @@ namespace StarterAssets
                 if (inputs.useL)
                 {
                     inputs.useL = false;
+                    dropItem(leftHandItem.type);
                     useItem(leftHandItem);
                 }
                 if (inputs.useR)
                 {
                     inputs.useR = false;
+                    dropItem(rightHandItem.type);
                     useItem(rightHandItem);
                 }
             }
@@ -98,11 +118,13 @@ namespace StarterAssets
                 {
                     inputs.useL = false;
                     useItem(leftHandItem);
+                    leftHandItem = (leftHandItem.type == "STONE" || leftHandItem.type == "LOUDTOY") ? emptyItem : leftHandItem;
                 }
                 if (inputs.useR)
                 {
                     inputs.useR = false;
                     useItem(rightHandItem);
+                    rightHandItem = (rightHandItem.type == "STONE" || rightHandItem.type == "LOUDTOY") ? emptyItem : rightHandItem;
                 }
             }
         }
@@ -124,18 +146,40 @@ namespace StarterAssets
                 isLookingAtItem = false;
         }
         
+        private void dropItem(string type)
+        {
+            switch (type)
+            {
+                case "STONE":
+                    Instantiate(prefab_stone, transform.position, Quaternion.identity);
+                    break;
+                case "TOY1":
+                    Instantiate(prefab_toyPiece1, transform.position, Quaternion.identity);
+                    break;
+                case "TOY2":
+                    Instantiate(prefab_toyPiece2, transform.position, Quaternion.identity);
+                    break;
+                case "LOUDTOY":
+                    Instantiate(prefab_distractionToy, transform.position, Quaternion.identity);
+                    break;
+                case "WOOD":
+                    Instantiate(prefab_firewood, transform.position, Quaternion.identity);
+                    break;
+            }
+        }
+
         private void useItem(Item item)
         {
             switch (item.type)
             {
                 case "STONE":
                     // Throw the rock
-                    rightHandItem = emptyItem;
-                    //Debug.Log("hi1");
+                    Vector3 lookDirection = GameObject.Find("PlayerCameraRoot").transform.rotation * new Vector3(0f, 0f, 1f);
+                    GameObject thrownStone = Instantiate(prefab_activeStone, transform.position + new Vector3(lookDirection.x, 0f, lookDirection.z).normalized + new Vector3(0f, 1f, 0f), Quaternion.identity);
+                    thrownStone.GetComponent<Rigidbody>().velocity = new Vector3(lookDirection.x * 16f, lookDirection.y * 8f + 4f, lookDirection.z * 16f);
                     break;
                 case "LOUDTOY":
                     // Deploy distraction toy
-                    item = emptyItem;
                     break;
             }
         }
@@ -158,11 +202,11 @@ namespace StarterAssets
                     else
                     {
                         //You are looking at an item and are close enough to pick it up
-                        if (interactable.item.type == "BAG")
+                        if (interactable.item.type == "BAG" && !hasBag)
                         {
                             // If it's a bag, wear it instead of picking it up
                             hasBag = true;
-                            //Destroy(playerVisionTarget);
+                            Destroy(playerVisionTarget);
                         }
                         else
                         {
@@ -171,14 +215,14 @@ namespace StarterAssets
                                 rightHandItem = interactable.item;
                                 Destroy(playerVisionTarget);
                                 if (rightHandItem.type == "ACTIVESTONE")
-                                    rightHandItem.type = "STONE";
+                                    rightHandItem = inactiveRock;
                             }
                             if (hand == side.Left && leftHandItem.type == "NONE")
                             {
                                 leftHandItem = interactable.item;
                                 Destroy(playerVisionTarget);
                                 if (leftHandItem.type == "ACTIVESTONE")
-                                    leftHandItem.type = "STONE";
+                                    leftHandItem = inactiveRock;
                             }
                         }
                     }
