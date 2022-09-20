@@ -95,13 +95,13 @@ namespace StarterAssets
                 {
                     inputs.useL = false;
                     dropItem(leftHandItem.type);
-                    useItem(leftHandItem);
+                    leftHandItem = emptyItem;
                 }
                 if (inputs.useR)
                 {
                     inputs.useR = false;
                     dropItem(rightHandItem.type);
-                    useItem(rightHandItem);
+                    rightHandItem = emptyItem;
                 }
             }
             else
@@ -181,7 +181,7 @@ namespace StarterAssets
                 case "STONE":
                     // Throw the rock
                     GameObject thrownStone = Instantiate(prefab_activeStone, transform.position + new Vector3(lookDirection.x, 0f, lookDirection.z).normalized + new Vector3(0f, 1f, 0f), Quaternion.identity);
-                    thrownStone.GetComponent<Rigidbody>().velocity = new Vector3(lookDirection.x * 16f, lookDirection.y * 8f + 4f, lookDirection.z * 16f);
+                    thrownStone.GetComponent<Rigidbody>().velocity = new Vector3(lookDirection.x * 32f, lookDirection.y * 16f + 8f, lookDirection.z * 32f);
                     break;
                 case "LOUDTOY":
                     // Deploy distraction toy

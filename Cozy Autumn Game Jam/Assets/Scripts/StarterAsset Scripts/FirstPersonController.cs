@@ -67,6 +67,10 @@ namespace StarterAssets
 		private float _jumpTimeoutDelta;
 		private float _fallTimeoutDelta;
 
+		[Header("Footsteps")]
+		public GameObject footstepPrefab_walking;
+		public GameObject footstepPrefab_running;
+
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 		private PlayerInput _playerInput;
 #endif
@@ -76,6 +80,10 @@ namespace StarterAssets
 		private InteractionController _interactions;
 
 		private const float _threshold = 0.01f;
+
+		public enum moveTypes { walk, sneak, sprint};
+
+		private moveTypes moveType = moveTypes.walk;
 
 		private bool IsCurrentDeviceMouse
 		{
@@ -160,10 +168,17 @@ namespace StarterAssets
 		{
 			// set target speed to move speed by default, and instead use SneakSpeed or SprintSpeed if the player is Sneaking or Sprinting
 			float targetSpeed = MoveSpeed;
+			moveType = moveTypes.walk;
 			if (_input.sprint)
+			{
 				targetSpeed = SprintSpeed;
+				moveType = moveTypes.sprint;
+            }
 			else if (_input.sneak)
+			{
 				targetSpeed = SneakSpeed;
+                moveType = moveTypes.sneak;
+            }
 
 			// a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
@@ -201,7 +216,11 @@ namespace StarterAssets
 			{
 				// move
 				inputDirection = transform.right * _input.move.x + transform.forward * _input.move.y;
-			}
+				if (moveType == moveTypes.walk)
+					Instantiate(footstepPrefab_walking, transform.position, Quaternion.identity);
+				else if (moveType == moveTypes.sprint)
+                    Instantiate(footstepPrefab_running, transform.position, Quaternion.identity);
+            }
 
 			// move the player
 			_controller.Move(inputDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);

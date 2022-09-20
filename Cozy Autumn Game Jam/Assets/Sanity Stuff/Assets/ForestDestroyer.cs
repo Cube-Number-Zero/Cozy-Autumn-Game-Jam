@@ -1,81 +1,83 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class ForestDestroyer : MonoBehaviour
+namespace StarterAssets
 {
-
-
-    //Get Trigger Script
-    TriggerTest triggerTestScript;
-
-
-    //Create Cooldown
-    public float coolDown = 30f;
-
-    public bool numGenerated = false;
-    [Range(0, 10)]
-    public int randNum;
-
-
-    public bool changeForest = false;
-
-
-    //Timer
-    public float changePerSec = 0f;
-
-
-    
-    void Start()
+    public class ForestDestroyer : MonoBehaviour
     {
-        triggerTestScript = GameObject.Find("trigger").GetComponent<TriggerTest>();
-    }
 
-    
-    void Update()
-    {
-        //Checks to see if player is in trigger, then Generates random number once
-        if (triggerTestScript.isInTrigger == true && numGenerated == false && coolDown <= 0f)
+
+        //Get Trigger Script
+        TriggerTest triggerTestScript;
+
+
+        //Create Cooldown
+        public float coolDown = 30f;
+
+        public bool numGenerated = false;
+        [Range(0, 10)]
+        public int randNum;
+
+
+        public bool changeForest = false;
+
+
+        //Timer
+        public float changePerSec = 0f;
+
+
+
+        void Start()
         {
-            RandomChance();
-            numGenerated = true;
-            coolDown += 30f;
+            triggerTestScript = GameObject.Find("trigger").GetComponent<TriggerTest>();
         }
 
 
-        if(triggerTestScript.isInTrigger == false && numGenerated == true)
+        void Update()
         {
-            numGenerated = false;
+            //Checks to see if player is in trigger, then Generates random number once
+            if (triggerTestScript.isInTrigger == true && numGenerated == false && coolDown <= 0f)
+            {
+                RandomChance();
+                numGenerated = true;
+                coolDown += 30f;
+            }
+
+
+            if (triggerTestScript.isInTrigger == false && numGenerated == true)
+            {
+                numGenerated = false;
+            }
+
+
+            if (randNum == 7)
+            {
+                changeForest = true;
+                Destroy(this.gameObject);
+
+
+            }
+
+            if (coolDown >= 0f)
+            {
+                TreeClock();
+            }
+
         }
 
 
-        if (randNum == 7)
+
+
+        void RandomChance()
         {
-            changeForest = true;
-            Destroy(this.gameObject);
-            
-     
+            randNum = Random.Range(0, 10);
         }
 
-        if (coolDown >= 0f)
+
+        void TreeClock()
         {
-            TreeClock();
+            coolDown -= changePerSec * Time.deltaTime;
         }
 
     }
-
-
-
-
-    void RandomChance()
-    {
-        randNum = Random.Range(0, 10);
-    }
-
-
-    void TreeClock()
-    {
-        coolDown -= changePerSec * Time.deltaTime;
-    }
-
 }

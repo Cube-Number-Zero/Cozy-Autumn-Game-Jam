@@ -219,6 +219,10 @@ MonoBehaviour:
   CinemachineCameraTarget: {fileID: 4135013735270702863}
   TopClamp: 89
   BottomClamp: -89
+  footstepPrefab_walking: {fileID: 5446419524926450109, guid: fcadc2b10d39c814a8abf2d600639ff2,
+    type: 3}
+  footstepPrefab_running: {fileID: 5446419524926450109, guid: 3b8d323c5db60db499acf2af5ea9ac88,
+    type: 3}
 --- !u!114 &1978471637655604388
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -373,7 +377,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inactiveRock: {fileID: 11400000, guid: 2d597df59f8808e40935b188c0042a01, type: 2}
-  playerVisionTarget: {fileID: 0}
+  useDistance: 3
   prefab_activeDistractionToy: {fileID: 4024321374521343169, guid: dff86815a925d3e4fa2952360ab590e4,
     type: 3}
   prefab_activeStone: {fileID: 4024321374521343169, guid: 589570fab64f6074e8bbb3651d504bd5,

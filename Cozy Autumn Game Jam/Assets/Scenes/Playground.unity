@@ -1566,6 +1566,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 562152429}
+  - component: {fileID: 562152430}
   m_Layer: 0
   m_Name: BurtFlightTarget
   m_TagString: Untagged
@@ -1588,6 +1589,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &562152430
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 562152428}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f00269b4be81d144af912d3c450dcc6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lastSeenPlayerLoc: {fileID: 0}
+  mostRecentFootstepHeard: {fileID: 0}
 --- !u!1001 &656918874
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3496,6 +3511,8 @@ MonoBehaviour:
   seenPlayerCertainty: 0
   burtAggressionGeneral: 1
   lastSeenPlayerLoc: {x: 0, y: 0, z: 0}
+  seenPlayerTargetPrefab: {fileID: 5446419524926450109, guid: c1d6867568011fb41bef6c670c952802,
+    type: 3}
 --- !u!54 &1819075802
 Rigidbody:
   m_ObjectHideFlags: 0
