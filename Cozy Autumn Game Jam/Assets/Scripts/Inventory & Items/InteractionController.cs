@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using TMPro;
 using System.Diagnostics;
 
 using Debug = UnityEngine.Debug;
@@ -27,7 +28,9 @@ namespace StarterAssets
         public static bool inventoryOpen = false;
         public static bool isLookingAtItem = false;
 
-        public GameObject playerVisionTarget;
+        public static GameObject playerVisionTarget;
+
+        public float useDistance = 3f;
 
         public enum side {Left, Right};
 
@@ -134,13 +137,15 @@ namespace StarterAssets
             Transform cam = GameObject.Find("PlayerCameraRoot").transform;
             Vector3 cameraDirection = cam.rotation * new Vector3(0f, 0f, 1f); // Where is the player looking?
             RaycastHit hit;
-            if (Physics.Raycast(cam.position, cameraDirection, out hit))
+            if (Physics.Raycast(cam.position, cameraDirection, out hit, useDistance))
             {
                 playerVisionTarget = hit.collider.gameObject;
                 if (playerVisionTarget.GetComponent<Interactable>() == null)
                     isLookingAtItem = false;
                 else
+                {
                     isLookingAtItem = true;
+                }
             }
             else
                 isLookingAtItem = false;
@@ -170,16 +175,17 @@ namespace StarterAssets
 
         private void useItem(Item item)
         {
+            Vector3 lookDirection = GameObject.Find("PlayerCameraRoot").transform.rotation * new Vector3(0f, 0f, 1f);
             switch (item.type)
             {
                 case "STONE":
                     // Throw the rock
-                    Vector3 lookDirection = GameObject.Find("PlayerCameraRoot").transform.rotation * new Vector3(0f, 0f, 1f);
                     GameObject thrownStone = Instantiate(prefab_activeStone, transform.position + new Vector3(lookDirection.x, 0f, lookDirection.z).normalized + new Vector3(0f, 1f, 0f), Quaternion.identity);
                     thrownStone.GetComponent<Rigidbody>().velocity = new Vector3(lookDirection.x * 16f, lookDirection.y * 8f + 4f, lookDirection.z * 16f);
                     break;
                 case "LOUDTOY":
                     // Deploy distraction toy
+                    Instantiate(prefab_activeDistractionToy, transform.position + new Vector3(lookDirection.x, 0f, lookDirection.z).normalized + new Vector3(0f, 1f, 0f), Quaternion.identity);
                     break;
             }
         }
@@ -190,11 +196,11 @@ namespace StarterAssets
             if(isLookingAtItem && playerVisionTarget != null)
             {
                 interactable = playerVisionTarget.GetComponent<Interactable>();
-                if (interactable != null)
+                if (interactable != null && playerVisionTarget.GetComponent<Interactable>().item.type != "ACTIVELOUDTOY")
                 {
-                    // You are looking at an item
+                    // You are looking at an item and it's not an active distraction toy
 
-                    if (Vector3.Distance(playerVisionTarget.transform.position, transform.position) > interactable.usableRadius)
+                    if (Vector3.Distance(playerVisionTarget.transform.position, transform.position) > useDistance)
                     {
                         //You are looking at an item, but it is too far away to use
                         //Debug.Log("Item is too far");

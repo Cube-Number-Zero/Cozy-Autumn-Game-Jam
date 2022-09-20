@@ -129,7 +129,9 @@ Made in 14 days for the Cozy Autumn Game Jam";
                 helpTextL.text = "";
                 if (InteractionController.isLookingAtItem)
                 {
-                    if (InteractionController.leftHandItem.type == "NONE" && InteractionController.rightHandItem.type == "NONE")
+                    if (InteractionController.playerVisionTarget.GetComponent<Interactable>().item.type == "ACTIVELOUDTOY")
+                        rightCornerControls.text = "Run!";
+                    else if (InteractionController.leftHandItem.type == "NONE" && InteractionController.rightHandItem.type == "NONE")
                         rightCornerControls.text = "[Q/E] pick up";
                     else if (InteractionController.leftHandItem.type == "NONE")
                         rightCornerControls.text = "[Q] pick up";

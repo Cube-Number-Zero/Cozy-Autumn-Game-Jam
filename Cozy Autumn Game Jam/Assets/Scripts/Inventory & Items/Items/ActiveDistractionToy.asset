@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 211742bcac9344f4580a811410cad1fb, type: 3}
   m_Name: ActiveDistractionToy
   m_EditorClassIdentifier: 
-  type: LOUDTOY
+  type: ACTIVELOUDTOY
   maxTimer: 15
-  turnInto: {fileID: 11400000, guid: 5646bbca471b2a34cb552951ab6cdd33, type: 2}
+  turnInto: {fileID: 0}

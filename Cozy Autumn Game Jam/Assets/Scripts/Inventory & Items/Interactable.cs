@@ -7,9 +7,6 @@ public class Interactable : MonoBehaviour
 
     public Item item;
 
-    [Range(0f, 10f)]
-    public float usableRadius = 3f; // How far the player can be and still pick up the item
-
     private float maxTime;
 
     [Range(0f, 1f)]
@@ -34,14 +31,11 @@ public class Interactable : MonoBehaviour
             visibleTimer = timer / maxTime;
             if (timer <= 0f)
             {
-                item = item.turnInto;
+                if (item.turnInto != null)
+                    item = item.turnInto;
+                else
+                    Destroy(this.gameObject);
             }
         }
-    }
-
-    void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, usableRadius);
     }
 }
