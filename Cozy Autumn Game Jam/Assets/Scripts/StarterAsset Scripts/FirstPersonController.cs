@@ -175,7 +175,7 @@ namespace StarterAssets
 			float currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
 
 			float speedOffset = 0.1f;
-			float inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;
+			float inputMagnitude = StarterAssetsInputs.analogMovement ? _input.move.magnitude : 1f;
 
 			// accelerate or decelerate to target speed
 			if (currentHorizontalSpeed < targetSpeed - speedOffset || currentHorizontalSpeed > targetSpeed + speedOffset)
@@ -279,13 +279,13 @@ namespace StarterAssets
 			if(_input.inventory) // If the player presses the button to open the inventory, ...
 			{
                 _input.inventory = false; // Reset the button's input back to false so everything else here is only done once
-				_interactions.inventoryOpen = !_interactions.inventoryOpen; // Toggle whether or not the inventory is open
+                InteractionController.inventoryOpen = !InteractionController.inventoryOpen; // Toggle whether or not the inventory is open
             }
 			// Same thing, but with the help menu
             if (_input.helpMenu)
             {
                 _input.helpMenu = false;
-                _interactions.helpMenuOpen = !_interactions.helpMenuOpen;
+                InteractionController.helpMenuOpen = !InteractionController.helpMenuOpen;
             }
         }
     }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Interactable Item", menuName = "Interactables (Custom)/Item")]
@@ -12,66 +13,16 @@ public class Item : ScriptableObject
      * STONE - Throwable rock
      * ACTIVESTONE - Throwable rock that hasn't hit anything yet
      * LOUDTOY - Loud single-use distraction
+     * ACTIVELOUDTOY - Distraction, whilst distracting
      * NONE - No item
      * BAG - The permanent backpack upgrade
      * WOOD - Firewood
      */
-    [Tooltip("TOY1, TOY2, STONE, ACTIVESTONE, LOUDTOY, BAG, WOOD, NONE")]
+    [Tooltip("TOY1, TOY2, STONE, ACTIVESTONE, LOUDTOY, ACTIVELOUDTOY, BAG, WOOD, NONE")]
     public string type = "NONE";
-
-    private void update()
-    {
-        switch(type)
-        {
-            case "STONE":
-                updateStoneUniv();
-                updateStoneDormant();
-                return;
-            case "ACTIVESTONE":
-                updateStoneUniv();
-                updateStoneActive();
-                return;
-            case "LOUDTOY":
-                updateLoudToy();
-                return;
-            case "BAG":
-                updateBag();
-                return;
-            case "WOOD":
-                updateWood();
-                return;
-            case "NONE":
-                return;
-        }
-        updateToyPiece();
-    }
-
-    private void updateToyPiece()
-    {
-
-    }
-    private void updateStoneUniv()
-    {
-
-    }
-    private void updateStoneActive()
-    {
-
-    }
-    private void updateStoneDormant()
-    {
-
-    }
-    private void updateLoudToy()
-    {
-
-    }
-    private void updateBag()
-    {
-
-    }
-    private void updateWood()
-    {
-
-    }
+    [Tooltip("How long, in seconds, the item will exist before changing state")]
+    // Only used by ACTIVESTONE and ACTIVELOUDTOY
+    public float maxTimer = 0f;
+    [Tooltip("What this object will turn into once its timer runs out")]
+    public Item turnInto;
 }

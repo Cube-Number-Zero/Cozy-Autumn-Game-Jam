@@ -8,7 +8,6 @@ public class DynamicSoundtrackManager : MonoBehaviour
     // Just get a bunch of objects here so I can reference them
     private GameObject player;
     private GameObject burt;
-    private GameObject controller;
     private BurtController burtController;
     private float sanity = 1f;
     private GameObject ambience;
@@ -19,7 +18,6 @@ public class DynamicSoundtrackManager : MonoBehaviour
     {
         player = GameObject.Find("PlayerCapsule");
         burt = GameObject.Find("Burt");
-        controller = GameObject.Find("GameManager");
         burtDrums = GameObject.Find("Burt Drums");
         ambience = GameObject.Find("Ambience");
         burtController = burt.GetComponent<BurtController>();
@@ -27,7 +25,7 @@ public class DynamicSoundtrackManager : MonoBehaviour
 
     void Update()
     {
-        sanity = controller.GetComponent<PlayerManager>().sanity * 0.01f;
+        sanity = PlayerSanity.sanityLevel * 0.01f;
 
         ambience.GetComponent<AudioSource>().volume = 0.25f * (1f - sanity); // The background ambience is louder the lower sanity you have
 
