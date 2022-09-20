@@ -123,7 +123,7 @@ namespace StarterAssets
             else
                 isLookingAtItem = false;
         }
-
+        
         private void useItem(Item item)
         {
             switch (item.type)
@@ -131,7 +131,7 @@ namespace StarterAssets
                 case "STONE":
                     // Throw the rock
                     rightHandItem = emptyItem;
-                    Debug.Log("hi1");
+                    //Debug.Log("hi1");
                     break;
                 case "LOUDTOY":
                     // Deploy distraction toy
@@ -153,7 +153,7 @@ namespace StarterAssets
                     if (Vector3.Distance(playerVisionTarget.transform.position, transform.position) > interactable.usableRadius)
                     {
                         //You are looking at an item, but it is too far away to use
-                        Debug.Log("Item is too far");
+                        //Debug.Log("Item is too far");
                     }
                     else
                     {
@@ -162,7 +162,7 @@ namespace StarterAssets
                         {
                             // If it's a bag, wear it instead of picking it up
                             hasBag = true;
-                            Destroy(playerVisionTarget);
+                            //Destroy(playerVisionTarget);
                         }
                         else
                         {

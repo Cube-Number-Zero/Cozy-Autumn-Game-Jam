@@ -11,7 +11,7 @@ public class Interactable : MonoBehaviour
     public float usableRadius = 3f; // How far the player can be and still pick up the item
 
     GameObject player;
-
+    
     void Start()
     {
         player = GameObject.Find("PlayerCapsule");
