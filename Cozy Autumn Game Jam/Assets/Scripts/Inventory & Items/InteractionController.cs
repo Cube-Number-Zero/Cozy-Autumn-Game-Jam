@@ -131,7 +131,7 @@ namespace StarterAssets
                 }
             }
         }
-
+        
         private void testIfLookingAtObject()
         {
             Transform cam = GameObject.Find("PlayerCameraRoot").transform;

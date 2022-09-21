@@ -113,7 +113,7 @@ namespace StarterAssets
 			_jumpTimeoutDelta = JumpTimeout;
 			_fallTimeoutDelta = FallTimeout;
 		}
-
+		
 		private void Update()
 		{
 			JumpAndGravity();

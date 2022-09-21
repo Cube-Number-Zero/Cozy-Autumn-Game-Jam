@@ -83,6 +83,7 @@ namespace StarterAssets
 		{
 			UseLInput(value.isPressed);
 		}
+		
 		public void OnUseR(InputValue value)
 		{
 			UseRInput(value.isPressed);
