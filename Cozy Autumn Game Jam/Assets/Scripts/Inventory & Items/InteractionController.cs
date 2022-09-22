@@ -13,6 +13,7 @@ namespace StarterAssets
     {
 
         public static bool hasBag = false;
+        public bool fireplace = false;
 
         private static Item emptyItem;
 
@@ -121,13 +122,15 @@ namespace StarterAssets
                 {
                     inputs.useL = false;
                     useItem(leftHandItem);
-                    leftHandItem = (leftHandItem.type == "STONE" || leftHandItem.type == "LOUDTOY") ? emptyItem : leftHandItem;
+                    rightHandItem = (rightHandItem.type == "STONE" || rightHandItem.type == "LOUDTOY" || (rightHandItem.type == "WOOD" && fireplace)) ? emptyItem : rightHandItem;
+                    playerVisionTarget.GetComponent<fireplace>().flamelevel += 10;
                 }
                 if (inputs.useR)
                 {
                     inputs.useR = false;
                     useItem(rightHandItem);
-                    rightHandItem = (rightHandItem.type == "STONE" || rightHandItem.type == "LOUDTOY") ? emptyItem : rightHandItem;
+                    rightHandItem = (rightHandItem.type == "STONE" || rightHandItem.type == "LOUDTOY" || (rightHandItem.type == "WOOD" && fireplace)) ? emptyItem : rightHandItem;
+                    playerVisionTarget.GetComponent<fireplace>().flamelevel += 10;
                 }
             }
         }
@@ -186,6 +189,20 @@ namespace StarterAssets
                 case "LOUDTOY":
                     // Deploy distraction toy
                     Instantiate(prefab_activeDistractionToy, transform.position + new Vector3(lookDirection.x, 0f, lookDirection.z).normalized + new Vector3(0f, 1f, 0f), Quaternion.identity);
+                    break;
+                case "WOOD":
+                    Transform cam = GameObject.Find("PlayerCameraRoot").transform;
+                    Vector3 cameraDirection = cam.rotation * new Vector3(0f, 0f, 1f);
+                    RaycastHit hit;
+                    if(Physics.Raycast(cam.position, cameraDirection, out hit, useDistance))
+                    { 
+                        playerVisionTarget = hit.collider.gameObject;
+                        if (playerVisionTarget.name == "fireplace")
+                            fireplace = true;
+                        else{
+                            fireplace = false;
+                        }
+                    }
                     break;
             }
         }

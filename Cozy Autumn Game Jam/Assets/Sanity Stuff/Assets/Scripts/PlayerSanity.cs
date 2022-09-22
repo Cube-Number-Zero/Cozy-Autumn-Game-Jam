@@ -18,6 +18,7 @@ namespace StarterAssets
 
         public SanityBar sanityBar;
 
+    
         [Range(0f, 100f)]
         public static float sanityLevel = 100f;
         public float changePerSecond;
@@ -61,16 +62,16 @@ namespace StarterAssets
             {
                 bushrotatescene = true;
 
-     if (sanityLevel > 0 && sanityLevel < 90)
-        {
-            doSanityEvent = true;
-            eventWaitTimer -= changePerSecond * Time.deltaTime;
-            }
+                if (sanityLevel > 0 && sanityLevel < 90)
+                {
+                        doSanityEvent = true;
+                        eventWaitTimer -= changePerSecond * Time.deltaTime;
+                 }
+             }
+
+
+
         }
-
-
-
-
 
         void Update()
         {
