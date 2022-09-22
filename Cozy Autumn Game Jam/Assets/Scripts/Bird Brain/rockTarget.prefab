@@ -52,7 +52,7 @@ MonoBehaviour:
   volume: 50
   volumeDecayRate: 0.1
   distanceToBurt: 0
-  priority: 50
+  priority: 99
   sourceType: 2
 --- !u!23 &2098533591460901698
 MeshRenderer:

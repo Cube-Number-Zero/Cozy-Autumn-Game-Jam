@@ -2,39 +2,47 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Interactable : MonoBehaviour
+namespace StarterAssets
 {
-
-    public Item item;
-
-    private float maxTime;
-
-    [Range(0f, 1f)]
-    public float visibleTimer = 0.5f;
-    [HideInInspector]
-    public float timer;
-
-    GameObject player;
-    
-    void Start()
+    public class Interactable : MonoBehaviour
     {
-        player = GameObject.Find("PlayerCapsule");
-        maxTime = item.maxTimer;
-        timer = maxTime;
-    }
 
-    void Update()
-    {
-        if (timer > 0f)
+        public Item item;
+
+        private float maxTime;
+
+        [Range(0f, 1f)]
+        public float visibleTimer = 0.5f;
+        [HideInInspector]
+        public float timer;
+
+        GameObject player;
+
+        void Start()
         {
-            timer -= Time.deltaTime;
-            visibleTimer = timer / maxTime;
-            if (timer <= 0f)
+            player = GameObject.Find("PlayerCapsule");
+            maxTime = item.maxTimer;
+            timer = maxTime;
+        }
+
+        void Update()
+        {
+            if (timer > 0f)
             {
-                if (item.turnInto != null)
-                    item = item.turnInto;
-                else
-                    Destroy(this.gameObject);
+                timer -= Time.deltaTime;
+                visibleTimer = timer / maxTime;
+                if (timer <= 0f)
+                {
+                    if (item.turnInto != null)
+                    {
+                        GameObject target = this.GetComponentInChildren<PotentialTarget>().gameObject;
+                        if (target != null)
+                            Destroy(target);
+                        item = item.turnInto;
+                    }
+                    else
+                        Destroy(this.gameObject);
+                }
             }
         }
     }

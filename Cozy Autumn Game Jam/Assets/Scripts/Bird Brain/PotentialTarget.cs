@@ -57,17 +57,7 @@ namespace StarterAssets
         // Update is called once per frame
         void Update()
         {
-            if (sourceType == targetType.thrown)
-            {
-                if (soundDecay)
-                    volume -= volumeDecayRate * Time.deltaTime;
-                else
-                {
-                    volumeDecayRate -= Time.deltaTime;
-                    if (volumeDecayRate <= 0)
-                        Destroy(this.gameObject);
-                }
-            }
+            
             burtLoc = PlayerManager.burt.transform.position;
             if (sourceType == targetType.seenPlayer)
             {
