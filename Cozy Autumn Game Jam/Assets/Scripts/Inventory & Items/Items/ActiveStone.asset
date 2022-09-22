@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: ActiveStone
   m_EditorClassIdentifier: 
   type: ACTIVESTONE
-  maxTimer: 3
+  maxTimer: 8
   turnInto: {fileID: 11400000, guid: 2d597df59f8808e40935b188c0042a01, type: 2}

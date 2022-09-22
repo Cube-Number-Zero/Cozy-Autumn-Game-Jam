@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: ActiveDistractionToy
   m_EditorClassIdentifier: 
   type: ACTIVELOUDTOY
-  maxTimer: 15
+  maxTimer: 20
   turnInto: {fileID: 0}
