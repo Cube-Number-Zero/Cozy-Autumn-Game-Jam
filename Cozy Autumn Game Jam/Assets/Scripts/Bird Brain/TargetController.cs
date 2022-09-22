@@ -30,6 +30,8 @@ namespace StarterAssets
 
         void Update()
         {
+            if(!PlayerManager.hasPlayerWon)
+            {
             float maxPriority = 0f;
             int ID = -3;
             if (lastSeenPlayerLoc != null)
@@ -56,29 +58,36 @@ namespace StarterAssets
                     }
                 }
             }
-            if (maxPriority == 0f) // If Burt has nothing better to do,
-            {
-                // Then circle above the map randomly
-                Instantiate(randomWander, new Vector3(
-                    Random.Range(minAllowedWanderArea.x, maxAllowedWanderArea.x),
-                    Random.Range(minAllowedWanderArea.y, maxAllowedWanderArea.y),
-                    Random.Range(minAllowedWanderArea.z, maxAllowedWanderArea.z)), 
-                    Quaternion.identity);
-            }
-            else
-            {
-                if (ID == -2)
+                if (maxPriority < 25f) // If Burt has nothing better to do,
                 {
-                    transform.position = lastSeenPlayerLoc.transform.position;
-                }
-                else if (ID == -1)
-                {
-                    transform.position = mostRecentFootstepHeard.transform.position;
+                    // Then circle above the map randomly
+                    Instantiate(randomWander, new Vector3(
+                        Random.Range(minAllowedWanderArea.x, maxAllowedWanderArea.x),
+                        Random.Range(minAllowedWanderArea.y, maxAllowedWanderArea.y),
+                        Random.Range(minAllowedWanderArea.z, maxAllowedWanderArea.z)),
+                        Quaternion.identity);
+                    PlayerManager.burt.GetComponent<BurtController>().targetOrbitFrustration = 0f;
                 }
                 else
                 {
-                    transform.position = targetCandidates[ID].transform.position;
+                    if (ID == -2)
+                    {
+                        transform.position = lastSeenPlayerLoc.transform.position;
+                    }
+                    else if (ID == -1)
+                    {
+                        transform.position = mostRecentFootstepHeard.transform.position;
+                    }
+                    else
+                    {
+                        transform.position = targetCandidates[ID].transform.position;
+                    }
                 }
+            }
+            else
+            {
+                //The player has won
+                transform.position += new Vector3(0f, Time.deltaTime, 0f);
             }
         }
     }

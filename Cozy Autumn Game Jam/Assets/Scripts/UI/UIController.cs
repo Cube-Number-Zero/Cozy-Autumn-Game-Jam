@@ -50,35 +50,37 @@ namespace StarterAssets
 
         void Update()
         {
-            usingController = StarterAssetsInputs.analogMovement;
-            if (InteractionController.inventoryOpen)
+            if (!PlayerManager.hasPlayerWon)
             {
-                bg.SetActive(true);
+                usingController = StarterAssetsInputs.analogMovement;
+                if (InteractionController.inventoryOpen)
+                {
+                    bg.SetActive(true);
 
-                leftCornerControls.text = usingController ? "[NORTH BUTTON] close" : "[TAB] close";
-                rightCornerControls.text = usingController ? "[LEFT/RIGHT TRIGGER] drop item" : "[LEFT/RIGHT CLICK] drop item";
-                leftHandItemName.text = getNameFromID(getIDForItemL());
-                rightHandItemName.text = getNameFromID(getIDForItemR());
-                bagItemName.text = InteractionController.hasBag ? getNameFromID(getIDForItemB()) : "";
-                leftHandItemDesc.text = getDescFromID(getIDForItemL());
-                rightHandItemDesc.text = getDescFromID(getIDForItemR());
-                bagItemDesc.text = InteractionController.hasBag ? getDescFromID(getIDForItemB()) : "";
-                helpTextR.text = "";
-                helpTextL.text = "";
-            }
-            else if (InteractionController.helpMenuOpen)
-            {
-                bg.SetActive(true);
+                    leftCornerControls.text = usingController ? "[NORTH BUTTON] close" : "[TAB] close";
+                    rightCornerControls.text = usingController ? "[LEFT/RIGHT TRIGGER] drop item" : "[LEFT/RIGHT CLICK] drop item";
+                    leftHandItemName.text = getNameFromID(getIDForItemL());
+                    rightHandItemName.text = getNameFromID(getIDForItemR());
+                    bagItemName.text = InteractionController.hasBag ? getNameFromID(getIDForItemB()) : "";
+                    leftHandItemDesc.text = getDescFromID(getIDForItemL());
+                    rightHandItemDesc.text = getDescFromID(getIDForItemR());
+                    bagItemDesc.text = InteractionController.hasBag ? getDescFromID(getIDForItemB()) : "";
+                    helpTextR.text = "";
+                    helpTextL.text = "";
+                }
+                else if (InteractionController.helpMenuOpen)
+                {
+                    bg.SetActive(true);
 
-                leftCornerControls.text = usingController ? "[SELECT] close" : "[H] close";
-                leftHandItemName.text = "";
-                rightHandItemName.text = "";
-                bagItemName.text = "";
-                leftHandItemDesc.text = "";
-                rightHandItemDesc.text = "";
-                bagItemDesc.text = "";
-                helpTextR.text = usingController ?
-@"CONTROLS:
+                    leftCornerControls.text = usingController ? "[SELECT] close" : "[H] close";
+                    leftHandItemName.text = "";
+                    rightHandItemName.text = "";
+                    bagItemName.text = "";
+                    leftHandItemDesc.text = "";
+                    rightHandItemDesc.text = "";
+                    bagItemDesc.text = "";
+                    helpTextR.text = usingController ?
+    @"CONTROLS:
 Left Joystick: Move
 Right Joystick: Look
 Left Joystick Press: Sprint
@@ -92,7 +94,7 @@ IN INVENTORY:
 Left/Right Bumpers: Drop item
 Left/Right Triggers: Swap item into bag
 (if available)" :
-@"CONTROLS:
+    @"CONTROLS:
 W/A/S/D or Arrows: Move
 Mouse: Look
 Shift: Sprint
@@ -106,42 +108,60 @@ IN INVENTORY:
 Left/Right Click: Drop item
 Q/E: Swap item into bag
 (if available)";
-                helpTextL.text =
-@"OVERVIEW:
-- Find every piece of your toy, assemble it, and return to your bed to complete the game.
+                    helpTextL.text =
+    @"OVERVIEW:
+- Find every piece of your toy, return them to your cabin, and assemble to toy to complete the game.
 - Staying in the cabin with the fire lit will help to prevent you from losing your mind.
 - The fire will burn out eventually. Bring firewood from outside to keep the fire burning.
 
 Made in 14 days for the Cozy Autumn Game Jam";
+                }
+                else
+                {
+                    bg.SetActive(false);
+
+                    leftCornerControls.text = usingController ? "[SELECT] help" : "[H] help";
+                    leftHandItemName.text = "";
+                    rightHandItemName.text = "";
+                    bagItemName.text = "";
+                    leftHandItemDesc.text = "";
+                    rightHandItemDesc.text = "";
+                    bagItemDesc.text = "";
+                    helpTextR.text = "";
+                    helpTextL.text = "";
+                    if (InteractionController.isLookingAtItem)
+                    {
+                        if (InteractionController.playerVisionTarget.GetComponent<Interactable>().item.type == "ACTIVELOUDTOY")
+                            rightCornerControls.text = "Run!";
+                        else if (InteractionController.leftHandItem.type == "NONE" && InteractionController.rightHandItem.type == "NONE")
+                            rightCornerControls.text = "[Q/E] pick up";
+                        else if (InteractionController.leftHandItem.type == "NONE")
+                            rightCornerControls.text = "[Q] pick up";
+                        else if (InteractionController.rightHandItem.type == "NONE")
+                            rightCornerControls.text = "[E] pick up";
+                        else
+                            rightCornerControls.text = "hands full";
+                    }
+                    else
+                        rightCornerControls.text = "";
+                }
             }
             else
             {
-                bg.SetActive(false);
+                // The player has won
+                bg.SetActive(true);
 
-                leftCornerControls.text = usingController ? "[SELECT] help" : "[H] help";
+                leftCornerControls.text = "";
                 leftHandItemName.text = "";
                 rightHandItemName.text = "";
                 bagItemName.text = "";
                 leftHandItemDesc.text = "";
                 rightHandItemDesc.text = "";
-                bagItemDesc.text = "";
+                bagItemDesc.text = "Game complete.";
                 helpTextR.text = "";
                 helpTextL.text = "";
-                if (InteractionController.isLookingAtItem)
-                {
-                    if (InteractionController.playerVisionTarget.GetComponent<Interactable>().item.type == "ACTIVELOUDTOY")
-                        rightCornerControls.text = "Run!";
-                    else if (InteractionController.leftHandItem.type == "NONE" && InteractionController.rightHandItem.type == "NONE")
-                        rightCornerControls.text = "[Q/E] pick up";
-                    else if (InteractionController.leftHandItem.type == "NONE")
-                        rightCornerControls.text = "[Q] pick up";
-                    else if (InteractionController.rightHandItem.type == "NONE")
-                        rightCornerControls.text = "[E] pick up";
-                    else
-                        rightCornerControls.text = "hands full";
-                }
-                else
-                    rightCornerControls.text = "";
+                rightCornerControls.text = "";
+
             }
         }
 

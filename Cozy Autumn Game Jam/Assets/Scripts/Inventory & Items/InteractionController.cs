@@ -120,15 +120,28 @@ namespace StarterAssets
                 if (inputs.useL)
                 {
                     inputs.useL = false;
-                    useItem(leftHandItem);
-                    rightHandItem = (rightHandItem.type == "STONE" || rightHandItem.type == "LOUDTOY" || (rightHandItem.type == "WOOD" && playerVisionTarget.name == "fireplace")) ? emptyItem : rightHandItem;
+                    if (leftHandItem.type == "STONE" ||
+                       leftHandItem.type == "LOUDTOY" ||
+                       (leftHandItem.type == "WOOD" && playerVisionTarget.name == "fireplace") ||
+                       (leftHandItem.type == "TOY1" && playerVisionTarget.name == "toy_construction") ||
+                       (rightHandItem.type == "TOY2" && playerVisionTarget.name == "toy_construction"))
+                    {
+                        useItem(leftHandItem);
+                        leftHandItem = emptyItem;
+                    }
                 }
                 if (inputs.useR)
                 {
                     inputs.useR = false;
-                    useItem(rightHandItem);
-                    rightHandItem = (rightHandItem.type == "STONE" || rightHandItem.type == "LOUDTOY" || (rightHandItem.type == "WOOD" && playerVisionTarget.name == "fireplace")) ? emptyItem : rightHandItem;
-                    
+                    if (rightHandItem.type == "STONE" ||
+                       rightHandItem.type == "LOUDTOY" ||
+                       (rightHandItem.type == "WOOD" && playerVisionTarget.name == "fireplace") ||
+                       (rightHandItem.type == "TOY1" && playerVisionTarget.name == "toy_construction") ||
+                       (rightHandItem.type == "TOY2" && playerVisionTarget.name == "toy_construction"))
+                    {
+                        useItem(rightHandItem);
+                        rightHandItem = emptyItem;
+                    }
                 }
             }
         }
@@ -186,10 +199,19 @@ namespace StarterAssets
                     break;
                 case "LOUDTOY":
                     // Deploy distraction toy
+                    PlayerManager.burt.GetComponent<BurtController>().burtDistracted = true;
                     Instantiate(prefab_activeDistractionToy, transform.position + new Vector3(lookDirection.x, 0f, lookDirection.z).normalized + new Vector3(0f, 1f, 0f), Quaternion.identity);
                     break;
                 case "WOOD":
                     playerVisionTarget.GetComponent<fireplace>().flamelevel += 30;
+                    break;
+                case "TOY1":
+                    playerVisionTarget.GetComponent<buildabearworkshop>().piece1Attached = true;
+                    playerVisionTarget.GetComponent<buildabearworkshop>().piecesAttached++;
+                    break;
+                case "TOY2":
+                    playerVisionTarget.GetComponent<buildabearworkshop>().piece2Attached = true;
+                    playerVisionTarget.GetComponent<buildabearworkshop>().piecesAttached++;
                     break;
             }
         }

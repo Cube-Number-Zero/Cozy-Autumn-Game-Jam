@@ -10,6 +10,7 @@ namespace StarterAssets
         public static GameObject player; // Allows other scripts to find the player with PlayerManager.instance.player
         public static GameObject burt; // Allows other scripts to find Burt with PlayerManager.instance.burt
         public static GameObject target;
+        public static bool hasPlayerWon = false;
         public static bool inCabin = false;
 
         public static PlayerManager instance;

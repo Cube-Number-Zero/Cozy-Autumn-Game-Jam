@@ -41,7 +41,10 @@ namespace StarterAssets
                         item = item.turnInto;
                     }
                     else
+                    {
+                        PlayerManager.burt.GetComponent<BurtController>().burtDistracted = false;
                         Destroy(this.gameObject);
+                    }
                 }
             }
         }
