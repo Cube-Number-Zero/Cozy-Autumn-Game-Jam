@@ -36,9 +36,9 @@ namespace StarterAssets
                 }
                 time = 0f;
             }
+            /*
             playerDistance = Vector3.Distance(transform.position, player.transform.position);
             if(playerDistance < 5f){
-                Debug.Log("you're warm");
                 player.GetComponent<PlayerSanity>().additionPossible = true;
                 player.GetComponent<PlayerSanity>().subtractionPossible = false;
             }
@@ -46,6 +46,7 @@ namespace StarterAssets
                 player.GetComponent<PlayerSanity>().additionPossible = false;
                 player.GetComponent<PlayerSanity>().subtractionPossible = true;
             }
+            */
         }
     }
 }
