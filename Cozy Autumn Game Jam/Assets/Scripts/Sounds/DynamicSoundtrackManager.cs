@@ -13,6 +13,7 @@ namespace StarterAssets
         private BurtController burtController;
         private float sanity = 1f;
         private GameObject ambience;
+        private TargetController targetController;
 
         public GameObject burtDrums;
 
@@ -22,6 +23,7 @@ namespace StarterAssets
             burt = GameObject.Find("Burt");
             burtDrums = GameObject.Find("Burt Drums");
             ambience = GameObject.Find("Ambience");
+            targetController = GameObject.Find("BurtFlightTarget").GetComponent<TargetController>();
             burtController = burt.GetComponent<BurtController>();
         }
 
@@ -39,7 +41,7 @@ namespace StarterAssets
 
 
 
-            burtDrums.GetComponent<AudioLowPassFilter>().cutoffFrequency = applyLowPassToDrums(insanityRandomize(burtController.seenPlayerCertainty, 2f)); // Apply a low pass to the drums when Burt doesn't know where the player is
+            burtDrums.GetComponent<AudioLowPassFilter>().cutoffFrequency = applyLowPassToDrums(insanityRandomize(targetController.lastSeenPlayerLoc.GetComponent<PotentialTarget>().priority / 50f, 2f)); // Apply a low pass to the drums when Burt doesn't know where the player is
 
         }
 

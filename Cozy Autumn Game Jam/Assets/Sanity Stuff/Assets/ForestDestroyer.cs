@@ -7,9 +7,6 @@ namespace StarterAssets
     {
 
 
-        //Get Trigger Script
-        TriggerTest triggerTestScript;
-
 
         //Create Cooldown
         public float coolDown = 30f;
@@ -27,16 +24,11 @@ namespace StarterAssets
 
 
 
-        void Start()
-        {
-            triggerTestScript = GameObject.Find("trigger").GetComponent<TriggerTest>();
-        }
-
 
         void Update()
         {
             //Checks to see if player is in trigger, then Generates random number once
-            if (triggerTestScript.isInTrigger == true && numGenerated == false && coolDown <= 0f)
+            if (PlayerManager.inCabin == true && numGenerated == false && coolDown <= 0f)
             {
                 RandomChance();
                 numGenerated = true;
@@ -44,7 +36,7 @@ namespace StarterAssets
             }
 
 
-            if (triggerTestScript.isInTrigger == false && numGenerated == true)
+            if (PlayerManager.inCabin == false && numGenerated == true)
             {
                 numGenerated = false;
             }

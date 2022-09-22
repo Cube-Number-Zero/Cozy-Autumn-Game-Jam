@@ -122,7 +122,6 @@ namespace StarterAssets
                     inputs.useL = false;
                     useItem(leftHandItem);
                     rightHandItem = (rightHandItem.type == "STONE" || rightHandItem.type == "LOUDTOY" || (rightHandItem.type == "WOOD" && playerVisionTarget.name == "fireplace")) ? emptyItem : rightHandItem;
-                    playerVisionTarget.GetComponent<fireplace>().flamelevel += 10;
                 }
                 if (inputs.useR)
                 {

@@ -10,6 +10,15 @@ namespace StarterAssets
 {
     public class TargetController : MonoBehaviour
     {
+        [Header("Wandering Controls")]
+
+        // These control the area in which Burt will wander when he doesn't know where the player is
+
+        public Vector3 minAllowedWanderArea = new Vector3(-50f, 20f, -50f);
+        public Vector3 maxAllowedWanderArea = new Vector3(50f, 30f, 50f);
+
+        public GameObject randomWander;
+
         public GameObject lastSeenPlayerLoc;
         public GameObject mostRecentFootstepHeard;
         public static List<GameObject> targetCandidates = new List<GameObject>();
@@ -50,7 +59,11 @@ namespace StarterAssets
             if (maxPriority == 0f) // If Burt has nothing better to do,
             {
                 // Then circle above the map randomly
-                transform.position = new Vector3(Random.Range(-50f, 50f), Random.Range(20f, 30f), Random.Range(-50f, 50f));
+                Instantiate(randomWander, new Vector3(
+                    Random.Range(minAllowedWanderArea.x, maxAllowedWanderArea.x),
+                    Random.Range(minAllowedWanderArea.y, maxAllowedWanderArea.y),
+                    Random.Range(minAllowedWanderArea.z, maxAllowedWanderArea.z)), 
+                    Quaternion.identity);
             }
             else
             {
