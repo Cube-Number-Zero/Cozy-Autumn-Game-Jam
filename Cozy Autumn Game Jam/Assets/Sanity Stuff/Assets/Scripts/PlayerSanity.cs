@@ -1,14 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.UI;
+
+using Debug = UnityEngine.Debug;
 
 namespace StarterAssets
 {
     public class PlayerSanity : MonoBehaviour
     {
         //Get TriggerTest Script
-        public TriggerTest playerTriggerTest;
         public GameObject otherGameObject;
 
 
@@ -18,8 +20,7 @@ namespace StarterAssets
 
         public SanityBar sanityBar;
 
-    
-        [Range(0f, 100f)]
+   
         public static float sanityLevel = 100f;
         public float changePerSecond;
         public bool subtractionPossible = true;
@@ -44,10 +45,7 @@ namespace StarterAssets
         public bool eventTimeGenerated = false;
 
 
-        void Start()
-        {
-            playerTriggerTest = otherGameObject.GetComponent<TriggerTest>();
-        }
+        
 
 
 
@@ -110,11 +108,6 @@ namespace StarterAssets
                 }
             }
 
-
-
-
-
-
             // Checks sanity level and determines if it is possible to either add or subtract sanity
             subtractionPossible = (sanityLevel > 0f);
             additionPossible = (sanityLevel < 100f);
@@ -122,13 +115,15 @@ namespace StarterAssets
 
             //Checks if player is in or out of trigger and does the appropriate action to sanity
 
-            if (playerTriggerTest.isInTrigger && additionPossible)
+            if (PlayerManager.inCabin && additionPossible)
             {
-                sanityLevel += changePerSecond * Time.deltaTime;
+                fireplace theFire = GameObject.Find("fireplace").GetComponent<fireplace>();
+                sanityLevel += changePerSecond * Time.deltaTime * theFire.flamelevel * 5f;
+                theFire.flamelevel = Mathf.Max(0f, theFire.flamelevel - 2f * Time.deltaTime); // The flame burns out faster when the player is gaining sanity (speeding up time so the player doesn't have to wait)
 
             }
 
-            if (!playerTriggerTest.isInTrigger && subtractionPossible)
+            if (!PlayerManager.inCabin && subtractionPossible)
             {
                 sanityLevel -= changePerSecond * Time.deltaTime;
             }

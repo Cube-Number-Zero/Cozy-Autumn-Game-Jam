@@ -20,7 +20,7 @@ namespace StarterAssets
         public float distanceToBurt; // How far Burt is
         public float priority = 0f; // How interested Burt is in this target
 
-        public enum targetType { footstep, seenPlayer, thrown };
+        public enum targetType { footstep, seenPlayer, thrown, divineIntervention };
         public targetType sourceType; // Only used if "common" is enabled
 
         private Vector3 burtLoc;
@@ -51,27 +51,31 @@ namespace StarterAssets
             {
                 TargetController.targetCandidates.Add(this.gameObject);
             }
+            else if (sourceType == targetType.divineIntervention)
+            {
+                TargetController.targetCandidates.Add(this.gameObject);
+            }
 
         }
 
         // Update is called once per frame
         void Update()
         {
-            if (sourceType == targetType.thrown)
-            {
-                if (soundDecay)
-                    volume -= volumeDecayRate * Time.deltaTime;
-                else
-                {
-                    volumeDecayRate -= Time.deltaTime;
-                    if (volumeDecayRate <= 0)
-                        Destroy(this.gameObject);
-                }
-            }
+            distanceToBurt = Vector3.Distance(transform.position, PlayerManager.burt.transform.position);
+            if (distanceToBurt < 6f && sourceType == targetType.divineIntervention)
+                Destroy(this.gameObject);
             burtLoc = PlayerManager.burt.transform.position;
+            if (soundDecay)
+            {
+                if (volume < 0)
+                    Destroy(this.gameObject);
+                else
+                    volume -= volumeDecayRate * Time.deltaTime;
+            }
             if (sourceType == targetType.seenPlayer)
             {
-                priority = Mathf.Max(0f, priority - 4f * Time.deltaTime);
+                float multiplier = PlayerManager.inCabin ? 6f : 4f;
+                priority = Mathf.Max(0f, priority - multiplier * Time.deltaTime);
             }
         }
     }

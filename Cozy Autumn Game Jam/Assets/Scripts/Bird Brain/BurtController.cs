@@ -3,29 +3,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement;
 using Debug = UnityEngine.Debug;
 
 namespace StarterAssets
 {
 	public class BurtController : MonoBehaviour
 	{
-		#region AI CONTROL PARAMETERS
-
-		// These variables change certain aspects about Burt's AI!
-		// Change them as much as you want to help balance the game
-		// Note: these values aren't percentages. Setting them to 100 will multiply their default values by 100x
-		[Header("AI Control Parameters!")]
-		[Tooltip("How quickly Burt targets the player after seeing him")]
-		public float burtVisionCertaintyGrowth = 0.01f;
-		[Tooltip("How quickly Burt will forget about seeing the player")]
-		public float burtVisionCertaintyDecay = 0.005f;
-		[Tooltip("How quickly being near Burt will decay the player's sanity")]
-		public float burtProximitySanityDecay = 1f;
-		[Tooltip("How aggresive Burt is when sanity is full")]
-		[Range(0f, 1f)]
-		public float baseAggression = 0.5f;
-
-		#endregion
 
 		[Header("Tweakable Parameters")]
 		[Tooltip("How sharp Burt is able to turn, before burt's frustration system affects it")]
@@ -72,21 +56,14 @@ namespace StarterAssets
 		{
 			if (target.GetComponent<TargetController>().lastSeenPlayerLoc != null)
 				lastSeenPlayerLoc = target.GetComponent<TargetController>().lastSeenPlayerLoc.transform.position;
-			burtAggressionGeneral = (1f - PlayerSanity.sanityLevel * 0.01f) * (1f - baseAggression) + baseAggression;
-			if (CanSeePlayer()) // Tests if Burt has line of sight to the player
-			{
-				Instantiate(seenPlayerTargetPrefab, player.position + new Vector3(0f, 1.5f, 0f), Quaternion.identity);
-				isPlayerVisible = true;
-			}
-			else
-			{
-				isPlayerVisible = false;
-				seenPlayerCertainty -= seenPlayerCertainty - burtVisionCertaintyDecay * Time.deltaTime < 0f ? seenPlayerCertainty : burtVisionCertaintyDecay * Time.deltaTime; // Decreases seenPlayerCertainty if Burt can't see the player down to a minimum of 0 (Yes, that's all this line does)
-			}
 
-			float sanityRemoved = burtProximitySanityDecay / Mathf.Pow(Vector3.Distance(transform.position, player.position), 3f) * Time.deltaTime * 100f; // Reduce the player's sanity if they're near Burt
-			PlayerSanity.sanityLevel -= PlayerSanity.sanityLevel <= sanityRemoved ? PlayerSanity.sanityLevel : sanityRemoved;
-			flyTowardsTarget();
+			isPlayerVisible = CanSeePlayer(); // Tests if Burt has line of sight to the player
+			if (isPlayerVisible)
+                Instantiate(seenPlayerTargetPrefab, player.position + new Vector3(0f, 1.5f, 0f), Quaternion.identity);
+
+            flyTowardsTarget();
+
+			testForHomicide();
 
 		}
 
@@ -239,5 +216,24 @@ namespace StarterAssets
 			//Gizmos.color = Color.red;
 			//Gizmos.DrawWireSphere(raycasthitpos, 1f);
 		}
+
+		public bool testForHomicide()
+		{
+			if (!PlayerManager.inCabin && isPlayerVisible && Vector3.Distance(transform.position, player.position + new Vector3(0f, 2f, 0f)) < 2.5f)
+			{
+				homicide();
+				return true;
+			}
+			else
+				return false;
+		}
+
+		public void homicide()
+		{
+			// Kill the player.
+			Debug.Log("pwned");
+			SceneManager.LoadScene(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
+
+        }
 	}
 }

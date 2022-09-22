@@ -13,7 +13,6 @@ namespace StarterAssets
     {
 
         public static bool hasBag = false;
-        public bool fireplace = false;
 
         private static Item emptyItem;
 
@@ -122,15 +121,14 @@ namespace StarterAssets
                 {
                     inputs.useL = false;
                     useItem(leftHandItem);
-                    rightHandItem = (rightHandItem.type == "STONE" || rightHandItem.type == "LOUDTOY" || (rightHandItem.type == "WOOD" && fireplace)) ? emptyItem : rightHandItem;
-                    playerVisionTarget.GetComponent<fireplace>().flamelevel += 10;
+                    rightHandItem = (rightHandItem.type == "STONE" || rightHandItem.type == "LOUDTOY" || (rightHandItem.type == "WOOD" && playerVisionTarget.name == "fireplace")) ? emptyItem : rightHandItem;
                 }
                 if (inputs.useR)
                 {
                     inputs.useR = false;
                     useItem(rightHandItem);
-                    rightHandItem = (rightHandItem.type == "STONE" || rightHandItem.type == "LOUDTOY" || (rightHandItem.type == "WOOD" && fireplace)) ? emptyItem : rightHandItem;
-                    playerVisionTarget.GetComponent<fireplace>().flamelevel += 10;
+                    rightHandItem = (rightHandItem.type == "STONE" || rightHandItem.type == "LOUDTOY" || (rightHandItem.type == "WOOD" && playerVisionTarget.name == "fireplace")) ? emptyItem : rightHandItem;
+                    
                 }
             }
         }
@@ -191,18 +189,7 @@ namespace StarterAssets
                     Instantiate(prefab_activeDistractionToy, transform.position + new Vector3(lookDirection.x, 0f, lookDirection.z).normalized + new Vector3(0f, 1f, 0f), Quaternion.identity);
                     break;
                 case "WOOD":
-                    Transform cam = GameObject.Find("PlayerCameraRoot").transform;
-                    Vector3 cameraDirection = cam.rotation * new Vector3(0f, 0f, 1f);
-                    RaycastHit hit;
-                    if(Physics.Raycast(cam.position, cameraDirection, out hit, useDistance))
-                    { 
-                        playerVisionTarget = hit.collider.gameObject;
-                        if (playerVisionTarget.name == "fireplace")
-                            fireplace = true;
-                        else{
-                            fireplace = false;
-                        }
-                    }
+                    playerVisionTarget.GetComponent<fireplace>().flamelevel += 10;
                     break;
             }
         }
