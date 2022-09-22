@@ -18,20 +18,19 @@ namespace StarterAssets
         float timeB = 0f;
         float flamedecreasetime = 0.3f;
         float flameflickertime = .1f;
-
-        public float sanity;
+        AudioSource fireSound;
 
         // Start is called before the first frame update
         void Start()
         {
             me = gameObject.transform;
             myfire = me.GetComponentInChildren<Light>();
+            fireSound = this.GetComponentInChildren<AudioSource>();
         }
 
         // Update is called once per frame
         void Update()
         {
-            sanity = PlayerSanity.sanityLevel;
             time += Time.deltaTime;
             timeB += Time.deltaTime;
             if(time > flamedecreasetime)
@@ -46,9 +45,11 @@ namespace StarterAssets
                     time -= flamedecreasetime;
                 }
             }
-            if(timeB > flameflickertime){
+            if(timeB > flameflickertime)
+            {
                 fakeflamelvl = flamelevel*.2f;
                 myfire.intensity = Random.Range(flamelevel-fakeflamelvl,flamelevel+fakeflamelvl);
+                fireSound.volume = flamelevel * 0.01f;
                 timeB = 0f;
             }
 

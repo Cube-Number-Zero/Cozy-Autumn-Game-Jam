@@ -14,6 +14,7 @@ namespace StarterAssets
         private float sanity = 1f;
         private GameObject ambience;
         private TargetController targetController;
+        private AudioReverbFilter globalReverb;
 
         public GameObject burtDrums;
 
@@ -24,6 +25,7 @@ namespace StarterAssets
             burtDrums = GameObject.Find("Burt Drums");
             ambience = GameObject.Find("Ambience");
             targetController = GameObject.Find("BurtFlightTarget").GetComponent<TargetController>();
+            globalReverb = GameObject.Find("MainCamera").GetComponent<AudioReverbFilter>();
             burtController = burt.GetComponent<BurtController>();
         }
 
@@ -32,6 +34,7 @@ namespace StarterAssets
             sanity = PlayerSanity.sanityLevel * 0.01f;
 
             ambience.GetComponent<AudioSource>().volume = 0.25f * (1f - sanity); // The background ambience is louder the lower sanity you have
+            globalReverb.room = -1f * Mathf.Pow(2f, Mathf.Lerp(Mathf.Log(10000f, 2f), Mathf.Log(1000f, 2f), 1f - sanity));
 
 
 
@@ -64,7 +67,7 @@ namespace StarterAssets
         float applyLowPassToDrums(float intake)
         {
             // Math for converting the certainty into a frequency in hertz
-            return Mathf.Pow(2, Mathf.Lerp(Mathf.Log(80f, 2f), Mathf.Log(22000f, 2f), intake));
+            return Mathf.Pow(2f, Mathf.Lerp(Mathf.Log(80f, 2f), Mathf.Log(22000f, 2f), intake));
 
         }
     }

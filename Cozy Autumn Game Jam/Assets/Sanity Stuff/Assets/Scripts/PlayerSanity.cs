@@ -120,7 +120,7 @@ namespace StarterAssets
 
                 if (PlayerManager.inCabin && additionPossible)
                 {
-                    sanityLevel += changePerSecond * Time.deltaTime * theFire.flamelevel * 1f;
+                    sanityLevel += changePerSecond * Time.deltaTime * theFire.flamelevel * 0.5f;
                     theFire.flamelevel = Mathf.Max(0f, theFire.flamelevel - 10f * Time.deltaTime); // The flame burns out faster when the player is gaining sanity (speeding up time so the player doesn't have to wait)
 
                 }
@@ -134,6 +134,7 @@ namespace StarterAssets
 
                 //Sanity UI
                 sanityBar.SetSanity(sanityLevel);
+                GameObject.Find("Flashlight").GetComponent<Light>().intensity = sanityLevel * 2f;
 
 
 
