@@ -14,8 +14,8 @@ namespace StarterAssets
 
         // These control the area in which Burt will wander when he doesn't know where the player is
 
-        public Vector3 minAllowedWanderArea = new Vector3(-50f, 20f, -50f);
-        public Vector3 maxAllowedWanderArea = new Vector3(50f, 30f, 50f);
+        public Vector3 minAllowedWanderArea = new Vector3(-200f, 20f, -75f);
+        public Vector3 maxAllowedWanderArea = new Vector3(200f, 30f, 300f);
 
         public GameObject randomWander;
 

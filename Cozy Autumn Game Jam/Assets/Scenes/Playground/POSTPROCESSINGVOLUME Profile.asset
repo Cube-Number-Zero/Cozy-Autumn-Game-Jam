@@ -43,31 +43,31 @@ MonoBehaviour:
   active: 0
   redOutRedIn:
     m_OverrideState: 1
-    m_Value: 40
+    m_Value: 150
   redOutGreenIn:
     m_OverrideState: 1
-    m_Value: 30
+    m_Value: 100
   redOutBlueIn:
     m_OverrideState: 1
-    m_Value: 30
+    m_Value: -150
   greenOutRedIn:
     m_OverrideState: 1
-    m_Value: 30
+    m_Value: 10
   greenOutGreenIn:
     m_OverrideState: 1
-    m_Value: 40
+    m_Value: 90
   greenOutBlueIn:
     m_OverrideState: 1
-    m_Value: 30
+    m_Value: 0
   blueOutRedIn:
     m_OverrideState: 1
-    m_Value: 30
+    m_Value: -25
   blueOutGreenIn:
     m_OverrideState: 1
-    m_Value: 30
+    m_Value: -25
   blueOutBlueIn:
     m_OverrideState: 1
-    m_Value: 40
+    m_Value: 150
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -99,22 +99,22 @@ MonoBehaviour:
   active: 0
   shadows:
     m_OverrideState: 1
-    m_Value: {x: 0.029559135, y: 0, z: 1, w: 9.1291674e-10}
+    m_Value: {x: 0.029559135, y: 0, z: 1, w: 0.000000007484871}
   midtones:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: {x: 1, y: 0.9831204, z: 0.98015213, w: -1}
   highlights:
     m_OverrideState: 1
-    m_Value: {x: 1, y: 0.29484552, z: 0, w: -0.0000000064524053}
+    m_Value: {x: 1, y: 0.29484552, z: 0, w: -0.0000000051864015}
   shadowsStart:
     m_OverrideState: 1
     m_Value: 0
   shadowsEnd:
     m_OverrideState: 1
-    m_Value: 0.16666667
+    m_Value: 0.1
   highlightsStart:
     m_OverrideState: 1
     m_Value: 0
   highlightsEnd:
     m_OverrideState: 1
-    m_Value: 0.5
+    m_Value: 0.1
