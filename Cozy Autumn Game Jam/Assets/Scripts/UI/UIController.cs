@@ -134,13 +134,40 @@ Made in 14 days for the Cozy Autumn Game Jam";
                         if (InteractionController.playerVisionTarget.GetComponent<Interactable>().item.type == "ACTIVELOUDTOY")
                             rightCornerControls.text = "Run!";
                         else if (InteractionController.leftHandItem.type == "NONE" && InteractionController.rightHandItem.type == "NONE")
-                            rightCornerControls.text = "[Q/E] pick up";
+                            rightCornerControls.text = usingController ? "[Left/Right Bumper] pick up" : "[Q/E] pick up";
                         else if (InteractionController.leftHandItem.type == "NONE")
-                            rightCornerControls.text = "[Q] pick up";
+                            rightCornerControls.text = usingController ? "[Left Bumper] pick up" : "[Q] pick up";
                         else if (InteractionController.rightHandItem.type == "NONE")
-                            rightCornerControls.text = "[E] pick up";
+                            rightCornerControls.text = usingController ? "[Right Bumper] pick up" : "[E] pick up";
                         else
                             rightCornerControls.text = "hands full";
+                    }
+                    else if (InteractionController.isLookingAtSpecial)
+                    {
+                        if (InteractionController.playerVisionTarget.GetComponent<fireplace>() != null)
+                        {
+                            if (InteractionController.leftHandItem.type == "WOOD" && InteractionController.rightHandItem.type == "WOOD")
+                                rightCornerControls.text = usingController ? "[Left/Right Trigger] fuel" : "[Left/Right Click] fuel";
+                            else if (InteractionController.leftHandItem.type == "WOOD")
+                                rightCornerControls.text = usingController ? "[Left Trigger] fuel" : "[Left Click] fuel";
+                            else if (InteractionController.rightHandItem.type == "WOOD")
+                                rightCornerControls.text = usingController ? "[Right Trigger] fuel" : "[Right Click] fuel";
+                            else
+                                rightCornerControls.text = "fireplace";
+                        }
+                        else if (InteractionController.playerVisionTarget.GetComponent<buildabearworkshop>() != null)
+                        {
+                            bool toyPieceInLeftHand =  InteractionController.leftHandItem.type  == "TOY1" || InteractionController.leftHandItem.type  == "TOY2";
+                            bool toyPieceInRightHand = InteractionController.rightHandItem.type == "TOY1" || InteractionController.rightHandItem.type == "TOY2";
+                            if (toyPieceInLeftHand && toyPieceInRightHand)
+                                rightCornerControls.text = usingController ? "[Left/Right Trigger] attach" : "[Left/Right Click] attach";
+                            else if (toyPieceInLeftHand)
+                                rightCornerControls.text = usingController ? "[Left Trigger] attach" : "[Left Click] attach";
+                            else if (toyPieceInRightHand)
+                                rightCornerControls.text = usingController ? "[Right Trigger] attach" : "[Right Click] attach";
+                            else
+                                rightCornerControls.text = "mangled toy";
+                        }
                     }
                     else
                         rightCornerControls.text = "";

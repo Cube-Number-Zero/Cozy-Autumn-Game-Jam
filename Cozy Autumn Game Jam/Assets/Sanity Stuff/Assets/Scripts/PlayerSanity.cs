@@ -116,16 +116,16 @@ namespace StarterAssets
 
 
                 //Checks if player is in or out of trigger and does the appropriate action to sanity
+                fireplace theFire = GameObject.Find("fireplace").GetComponent<fireplace>();
 
                 if (PlayerManager.inCabin && additionPossible)
                 {
-                    fireplace theFire = GameObject.Find("fireplace").GetComponent<fireplace>();
-                    sanityLevel += changePerSecond * Time.deltaTime * theFire.flamelevel * 5f;
-                    theFire.flamelevel = Mathf.Max(0f, theFire.flamelevel - 2f * Time.deltaTime); // The flame burns out faster when the player is gaining sanity (speeding up time so the player doesn't have to wait)
+                    sanityLevel += changePerSecond * Time.deltaTime * theFire.flamelevel * 1f;
+                    theFire.flamelevel = Mathf.Max(0f, theFire.flamelevel - 10f * Time.deltaTime); // The flame burns out faster when the player is gaining sanity (speeding up time so the player doesn't have to wait)
 
                 }
 
-                if (!PlayerManager.inCabin && subtractionPossible)
+                if (!(PlayerManager.inCabin && theFire.flamelevel > 0f) && subtractionPossible)
                 {
                     sanityLevel -= changePerSecond * Time.deltaTime;
                 }

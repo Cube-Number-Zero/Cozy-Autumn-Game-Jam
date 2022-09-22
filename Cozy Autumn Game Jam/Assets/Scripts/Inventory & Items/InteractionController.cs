@@ -27,6 +27,7 @@ namespace StarterAssets
         public static bool helpMenuOpen = false;
         public static bool inventoryOpen = false;
         public static bool isLookingAtItem = false;
+        public static bool isLookingAtSpecial = false;
 
         public static GameObject playerVisionTarget;
 
@@ -154,15 +155,25 @@ namespace StarterAssets
             if (Physics.Raycast(cam.position, cameraDirection, out hit, useDistance))
             {
                 playerVisionTarget = hit.collider.gameObject;
+
                 if (playerVisionTarget.GetComponent<Interactable>() == null)
                     isLookingAtItem = false;
                 else
-                {
                     isLookingAtItem = true;
-                }
+
+                if (playerVisionTarget.GetComponent<fireplace>() != null)
+                    isLookingAtSpecial = true;
+                else if (playerVisionTarget.GetComponent<buildabearworkshop>() != null)
+                    isLookingAtSpecial = true;
+                else
+                    isLookingAtSpecial = false;
+
             }
             else
+            {
                 isLookingAtItem = false;
+                isLookingAtSpecial = false;
+            }
         }
         
         private void dropItem(string type)
@@ -203,7 +214,9 @@ namespace StarterAssets
                     Instantiate(prefab_activeDistractionToy, transform.position + new Vector3(lookDirection.x, 0f, lookDirection.z).normalized + new Vector3(0f, 1f, 0f), Quaternion.identity);
                     break;
                 case "WOOD":
-                    playerVisionTarget.GetComponent<fireplace>().flamelevel += 30;
+                    fireplace fire = playerVisionTarget.GetComponent<fireplace>();
+                    if (fire.flamelevel > 0)
+                        fire.flamelevel += 30;
                     break;
                 case "TOY1":
                     playerVisionTarget.GetComponent<buildabearworkshop>().piece1Attached = true;

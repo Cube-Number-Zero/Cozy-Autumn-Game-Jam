@@ -11,7 +11,7 @@ namespace StarterAssets
         Light myfire;
         public GameObject player;
         Transform me;
-        public float flamelevel;
+        public float flamelevel = 100f;
         float fakeflamelvl;
         float playerDistance;
         float time = 0f;
@@ -19,10 +19,11 @@ namespace StarterAssets
         float flamedecreasetime = 0.3f;
         float flameflickertime = .1f;
 
+        public float sanity;
+
         // Start is called before the first frame update
         void Start()
         {
-            flamelevel = 100f;
             me = gameObject.transform;
             myfire = me.GetComponentInChildren<Light>();
         }
@@ -30,6 +31,7 @@ namespace StarterAssets
         // Update is called once per frame
         void Update()
         {
+            sanity = PlayerSanity.sanityLevel;
             time += Time.deltaTime;
             timeB += Time.deltaTime;
             if(time > flamedecreasetime)
@@ -43,7 +45,6 @@ namespace StarterAssets
                 {
                     time -= flamedecreasetime;
                 }
-                time = 0f;
             }
             if(timeB > flameflickertime){
                 fakeflamelvl = flamelevel*.2f;
