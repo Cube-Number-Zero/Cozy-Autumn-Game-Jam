@@ -12,14 +12,17 @@ namespace StarterAssets
         public GameObject player;
         Transform me;
         public float flamelevel;
+        float fakeflamelvl;
         float playerDistance;
         float time = 0f;
+        float timeB = 0f;
         float flamedecreasetime = 0.3f;
+        float flameflickertime = .1f;
 
         // Start is called before the first frame update
         void Start()
         {
-            flamelevel = 20f;
+            flamelevel = 100f;
             me = gameObject.transform;
             myfire = me.GetComponentInChildren<Light>();
         }
@@ -27,11 +30,11 @@ namespace StarterAssets
         // Update is called once per frame
         void Update()
         {
-            myfire.intensity = flamelevel;
             time += Time.deltaTime;
+            timeB += Time.deltaTime;
             if(time > flamedecreasetime)
             {
-                flamelevel -= .01f;
+                flamelevel -= .5f;
                 if (flamelevel < 0f)
                 {
                     flamelevel = 0f;
@@ -42,17 +45,12 @@ namespace StarterAssets
                 }
                 time = 0f;
             }
-            /*
-            playerDistance = Vector3.Distance(transform.position, player.transform.position);
-            if(playerDistance < 5f){
-                player.GetComponent<PlayerSanity>().additionPossible = true;
-                player.GetComponent<PlayerSanity>().subtractionPossible = false;
+            if(timeB > flameflickertime){
+                fakeflamelvl = flamelevel*.2f;
+                myfire.intensity = Random.Range(flamelevel-fakeflamelvl,flamelevel+fakeflamelvl);
+                timeB = 0f;
             }
-            else{
-                player.GetComponent<PlayerSanity>().additionPossible = false;
-                player.GetComponent<PlayerSanity>().subtractionPossible = true;
-            }
-            */
+
         }
     }
 }

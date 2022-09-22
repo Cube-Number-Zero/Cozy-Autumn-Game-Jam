@@ -189,7 +189,7 @@ namespace StarterAssets
                     Instantiate(prefab_activeDistractionToy, transform.position + new Vector3(lookDirection.x, 0f, lookDirection.z).normalized + new Vector3(0f, 1f, 0f), Quaternion.identity);
                     break;
                 case "WOOD":
-                    playerVisionTarget.GetComponent<fireplace>().flamelevel += 10;
+                    playerVisionTarget.GetComponent<fireplace>().flamelevel += 30;
                     break;
             }
         }
