@@ -73,77 +73,79 @@ namespace StarterAssets
 
         void Update()
         {
-            //Procecss Sanity Events
-
-            if (sanityLevel > 0 && sanityLevel < 90)
+            if (!PlayerManager.hasPlayerWon)
             {
-                doSanityEvent = true;
-                eventWaitTimer -= changePerSecond * Time.deltaTime;
-            }
+                //Procecss Sanity Events
 
-
-            if (doSanityEvent && eventWaitTimer <= 0f)
-            {
-                RandomGenerate();
-                eventWaitTimer = 5f;
-                doSanityEvent = false;
-
-            }
-
-            if (bushrotatescene)
-            {
-                if (eventTimer > 0f)
+                if (sanityLevel > 0 && sanityLevel < 90)
                 {
-                    eventTimer -= changePerSecond * Time.deltaTime;
+                    doSanityEvent = true;
+                    eventWaitTimer -= changePerSecond * Time.deltaTime;
                 }
-                else
+
+
+                if (doSanityEvent && eventWaitTimer <= 0f)
                 {
-                    if (!eventTimeGenerated)
+                    RandomGenerate();
+                    eventWaitTimer = 5f;
+                    doSanityEvent = false;
+
+                }
+
+                if (bushrotatescene)
+                {
+                    if (eventTimer > 0f)
                     {
-                        randomEventTime();
-                        eventTimeGenerated = true;
+                        eventTimer -= changePerSecond * Time.deltaTime;
                     }
-                    bushrotatescene = false;
-                    eventTimeGenerated = false;
+                    else
+                    {
+                        if (!eventTimeGenerated)
+                        {
+                            randomEventTime();
+                            eventTimeGenerated = true;
+                        }
+                        bushrotatescene = false;
+                        eventTimeGenerated = false;
+                    }
+                }
+
+                // Checks sanity level and determines if it is possible to either add or subtract sanity
+                subtractionPossible = (sanityLevel > 0f);
+                additionPossible = (sanityLevel < 100f);
+
+
+                //Checks if player is in or out of trigger and does the appropriate action to sanity
+
+                if (PlayerManager.inCabin && additionPossible)
+                {
+                    fireplace theFire = GameObject.Find("fireplace").GetComponent<fireplace>();
+                    sanityLevel += changePerSecond * Time.deltaTime * theFire.flamelevel * 5f;
+                    theFire.flamelevel = Mathf.Max(0f, theFire.flamelevel - 2f * Time.deltaTime); // The flame burns out faster when the player is gaining sanity (speeding up time so the player doesn't have to wait)
+
+                }
+
+                if (!PlayerManager.inCabin && subtractionPossible)
+                {
+                    sanityLevel -= changePerSecond * Time.deltaTime;
+                }
+
+
+
+                //Sanity UI
+                sanityBar.SetSanity(sanityLevel);
+
+
+
+                void randomEventTime()
+                {
+                    eventTimer = Random.Range(1, 10);
                 }
             }
-
-            // Checks sanity level and determines if it is possible to either add or subtract sanity
-            subtractionPossible = (sanityLevel > 0f);
-            additionPossible = (sanityLevel < 100f);
-
-
-            //Checks if player is in or out of trigger and does the appropriate action to sanity
-
-            if (PlayerManager.inCabin && additionPossible)
+            else
             {
-                fireplace theFire = GameObject.Find("fireplace").GetComponent<fireplace>();
-                sanityLevel += changePerSecond * Time.deltaTime * theFire.flamelevel * 5f;
-                theFire.flamelevel = Mathf.Max(0f, theFire.flamelevel - 2f * Time.deltaTime); // The flame burns out faster when the player is gaining sanity (speeding up time so the player doesn't have to wait)
-
+                // The player has won
             }
-
-            if (!PlayerManager.inCabin && subtractionPossible)
-            {
-                sanityLevel -= changePerSecond * Time.deltaTime;
-            }
-
-
-
-            //Sanity UI
-            sanityBar.SetSanity(sanityLevel);
-
-
-
-            void randomEventTime()
-            {
-                eventTimer = Random.Range(1, 10);
-            }
-
         }
-
-
-
-
     }
 }

@@ -17,7 +17,7 @@ namespace StarterAssets
 		[Tooltip("How quickly Burt flies")]
 		public float flightSpeed = 10f;
 		[Tooltip("How quickly Burt improves his turning ability if he can't get to the target. Also affects how quickly Burt will teleport to his target")]
-		public float frustrationGrowthRate = 0.01f; // The base rate at which Burt's frustration will grow, note that Burt's frustration is compounding; this just gives the frustration a kick to start the system
+		public float frustrationGrowthRate = 1f; // The base rate at which Burt's frustration will grow, note that Burt's frustration is compounding; this just gives the frustration a kick to start the system
 		[Tooltip("This affects how close Burt is willing to fly to a wall before he turns around.")]
 		public float obstacleAvoidingSightRadius = 5f; // How far Burt can see when trying not to fly into walls
 		[Tooltip("This affects how large a hole needs to be for Burt to think he can fly through it")]
@@ -28,14 +28,11 @@ namespace StarterAssets
 		[HideInInspector]
 		public Vector3 flightDirectionToTarget;
 		public Vector3 currentFlightDirection = new Vector3(1f, 0f, 0f);
-		[Range(1f, 1000f)]
+		[Range(0f, 1000f)]
 		public float targetOrbitFrustration = 1f; // This will make Burt better at turning the longer he spends moving away from the target; implemented to prevent "orbiting" behavior
-		[Range(0f, 1f)]
-		public float seenPlayerCertainty = 0f;
 		private float lastTargetDistance = 0f;
-		[Range(0f, 1f)]
-		public float burtAggressionGeneral = 1f;
 		public Vector3 lastSeenPlayerLoc = new Vector3(0f, 0f, 0f);
+		public bool burtDistracted = false;
 
 
 		public GameObject seenPlayerTargetPrefab;
@@ -92,8 +89,8 @@ namespace StarterAssets
 			{
 				if (!(isPlayerVisible // If neither Burt can see the player (and thus the player can see Burt)
 					|| CanSeePlayer(target.transform.position) // Nor could Burt see the player from the target (and thus the player could see Burt at the target)
-					|| Vector3.Distance(player.position, target.transform.position) < 48 // Nor is the target is too close to the player
-					|| Vector3.Distance(player.position, transform.position) < 16)) // Nor is Burt too close (Note that this is more lenient. It's no fun if Burt teleports next to you, but it is if he suddenly teleports away) 
+					|| Vector3.Distance(player.position, target.transform.position) < 16f // Nor is the target is too close to the player
+					|| Vector3.Distance(player.position, transform.position) < 4f)) // Nor is Burt too close (Note that this is more lenient. It's no fun if Burt teleports next to you, but it is if he suddenly teleports away) 
 					transform.position = target.transform.position; // Then just teleport Burt to the target
 			}
 			if (Physics.SphereCast(transform.position, obstacleAvoidingSpherecastRadius, currentFlightDirection, out RaycastHit hit, obstacleAvoidingSightRadius))
@@ -113,6 +110,10 @@ namespace StarterAssets
 			{
 				targetOrbitFrustration += (frustrationGrowthRate + targetOrbitFrustration - 1f) * Time.deltaTime;
 			}
+			else
+			{
+                targetOrbitFrustration -= (frustrationGrowthRate + targetOrbitFrustration - 1f) * 0.5f * Time.deltaTime;
+            }
 
 			lastTargetDistance = Vector3.Distance(transform.position, target.transform.position);
 
@@ -127,7 +128,7 @@ namespace StarterAssets
 
 
 
-		void DontHitWalls() // I wrote this in a fugue state or something; even I don't know what it does
+		void DontHitWalls() // I wrote this in a fugue state or something; I don't know what it does
 		{
 			//Figuring out where to look for open paths
 
@@ -219,7 +220,7 @@ namespace StarterAssets
 
 		public bool testForHomicide()
 		{
-			if (!PlayerManager.inCabin && isPlayerVisible && Vector3.Distance(transform.position, player.position + new Vector3(0f, 2f, 0f)) < 2.5f)
+			if (!PlayerManager.inCabin && isPlayerVisible && !burtDistracted && Vector3.Distance(transform.position, player.position + new Vector3(0f, 2f, 0f)) < 2.5f && !PlayerManager.hasPlayerWon)
 			{
 				homicide();
 				return true;
