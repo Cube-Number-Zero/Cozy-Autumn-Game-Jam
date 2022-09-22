@@ -18,7 +18,8 @@ namespace StarterAssets
         float timeB = 0f;
         float flamedecreasetime = 0.3f;
         float flameflickertime = .1f;
-        AudioSource fireSound;
+        public AudioSource fireSound;
+        public ParticleSystem parts;
 
         // Start is called before the first frame update
         void Start()
@@ -50,6 +51,10 @@ namespace StarterAssets
                 fakeflamelvl = flamelevel*.2f;
                 myfire.intensity = Random.Range(flamelevel-fakeflamelvl,flamelevel+fakeflamelvl);
                 fireSound.volume = flamelevel * 0.01f;
+                var main = parts.main;
+                main.maxParticles = (int)(0.14f * flamelevel);
+                main.startSize = 0.01f * flamelevel;
+                main.startLifetime = 0.01f * flamelevel;
                 timeB = 0f;
             }
 

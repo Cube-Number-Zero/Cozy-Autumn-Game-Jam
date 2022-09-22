@@ -49,7 +49,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item: {fileID: 11400000, guid: 2d597df59f8808e40935b188c0042a01, type: 2}
-  usableRadius: 3
+  visibleTimer: 0.5
+  timer: 0
 --- !u!135 &1467920272248109577
 SphereCollider:
   m_ObjectHideFlags: 0
