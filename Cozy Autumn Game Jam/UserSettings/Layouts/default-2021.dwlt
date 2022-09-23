@@ -147,7 +147,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 200}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 130
+  controlID: 17
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -172,7 +172,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 200}
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 1
-  controlID: 118
+  controlID: 81
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -197,7 +197,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 119
+  controlID: 82
 --- !u!114 &9
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -234,7 +234,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 1
   m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: ConsoleWindow
+  m_Name: ProjectBrowser
   m_EditorClassIdentifier: 
   m_Children: []
   m_Position:
@@ -243,14 +243,14 @@ MonoBehaviour:
     y: 658
     width: 1240
     height: 313
-  m_MinSize: {x: 101, y: 121}
-  m_MaxSize: {x: 4001, y: 4021}
-  m_ActualView: {fileID: 17}
+  m_MinSize: {x: 231, y: 271}
+  m_MaxSize: {x: 10001, y: 10021}
+  m_ActualView: {fileID: 16}
   m_Panes:
   - {fileID: 16}
   - {fileID: 17}
-  m_Selected: 1
-  m_LastSelected: 0
+  m_Selected: 0
+  m_LastSelected: 1
 --- !u!114 &11
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -270,8 +270,8 @@ MonoBehaviour:
     y: 0
     width: 664
     height: 971
-  m_MinSize: {x: 276, y: 71}
-  m_MaxSize: {x: 4001, y: 4021}
+  m_MinSize: {x: 275, y: 50}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 18}
   m_Panes:
   - {fileID: 18}
@@ -504,9 +504,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: -350.98932, y: -191.39246, z: 307.97205}
+    m_Target: {x: -454.71057, y: -311.44122, z: -250.09077}
     speed: 2
-    m_Value: {x: -350.98932, y: -191.39246, z: 307.97205}
+    m_Value: {x: -454.71057, y: -311.44122, z: -250.09077}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -553,9 +553,9 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: 0.1550957, y: -0.43449622, z: 0.077042736, w: 0.88422936}
+    m_Target: {x: 0.13110803, y: -0.83472264, z: 0.22738425, w: 0.48475724}
     speed: 2
-    m_Value: {x: 0.15493049, y: -0.43568292, z: 0.07725062, w: 0.8832945}
+    m_Value: {x: 0.1310658, y: -0.83445376, z: 0.22731102, w: 0.48460108}
   m_Size:
     m_Target: 311.02368
     speed: 2
@@ -616,9 +616,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 382a0300
-      m_LastClickedID: 207416
-      m_ExpandedIDs: 2245fbff085cfcff2eb1fcff64b3fcffdee6fcfff6e6fcff700bfdff14fbffffcc7a0000
+      m_SelectedIDs: 
+      m_LastClickedID: 0
+      m_ExpandedIDs: b4f2ffff18fbffff5c860000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -806,23 +806,23 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Scenes
+    - Assets/Sanity Stuff/Assets/Models
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Scenes
+  - Assets/Sanity Stuff/Assets/Models
   m_LastFoldersGridSize: -1
   m_LastProjectPath: C:\Users\bug20\OneDrive\Documents\GitHub\Cozy-Autumn-Game-Jam\Cozy
     Autumn Game Jam
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 64}
-    m_SelectedIDs: 329e0000
-    m_LastClickedID: 40498
-    m_ExpandedIDs: 00000000309e0000329e00005e9e0000629e0000649e00006e9e000042d9020000ca9a3b
+    scrollPos: {x: 0, y: 20}
+    m_SelectedIDs: 929f0000
+    m_LastClickedID: 40850
+    m_ExpandedIDs: 000000009e750000a0750000c6750000fc75000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -850,7 +850,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000309e0000329e0000
+    m_ExpandedIDs: 000000009e750000a0750000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -875,8 +875,8 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: a0a3fcff
-    m_LastClickedInstanceID: -220256
+    m_SelectedInstanceIDs: 
+    m_LastClickedInstanceID: 0
     m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: c62300002e6e0000
     m_RenameOverlay:
