@@ -23,7 +23,6 @@ namespace StarterAssets
         // Update is called once per frame
         void Update()
         {
-
             if (playerSanityScript.bushrotatescene)
             {
                 transform.Rotate(new Vector3(0f, 1f, 0f));
