@@ -233,7 +233,9 @@ namespace StarterAssets
 		{
 			// Kill the player.
 			Debug.Log("pwned");
-			SceneManager.LoadScene(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
+			Cursor.visible = true;
+			Cursor.lockState = CursorLockMode.None;
+            SceneManager.LoadScene(0);
 
         }
 	}

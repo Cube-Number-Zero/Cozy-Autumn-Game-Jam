@@ -8,6 +8,8 @@ public class MainMenu : MonoBehaviour
 {
     public void playGame()
     {
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Confined;
         SceneManager.LoadScene(1); //loads the actual game
     }
 

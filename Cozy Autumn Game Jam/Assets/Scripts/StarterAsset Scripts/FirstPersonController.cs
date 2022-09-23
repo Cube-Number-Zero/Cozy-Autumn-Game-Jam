@@ -83,7 +83,7 @@ namespace StarterAssets
 
 		public enum moveTypes { walk, sneak, sprint};
 
-		private moveTypes moveType = moveTypes.walk;
+		public static moveTypes moveType = moveTypes.walk;
 
 		private bool IsCurrentDeviceMouse
 		{

@@ -127,7 +127,10 @@ namespace StarterAssets
 
                 if (!(PlayerManager.inCabin && theFire.flamelevel > 0f) && subtractionPossible)
                 {
-                    sanityLevel -= changePerSecond * Time.deltaTime;
+                    float multiplier = 1f;
+                    if (FirstPersonController.moveType == FirstPersonController.moveTypes.sprint) // If the player is sprinting
+                        multiplier = 3f;
+                    sanityLevel -= changePerSecond * Time.deltaTime * multiplier;
                 }
 
 
