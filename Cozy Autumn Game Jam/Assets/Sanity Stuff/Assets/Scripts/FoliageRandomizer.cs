@@ -16,10 +16,14 @@ public class FoliageRandomizer : MonoBehaviour
     
     void Start()
     {
-        if (posGrabbed ==false && bushesCreated < 65)
+        for (int i = 0; i < 70; i++)
         {
-            GetRandomPos();
-            Instantiate(Bush,new Vector3(-randx, 0f, -randz), Quaternion.identity);
+            if (posGrabbed == false)
+            {
+                GetRandomPos();
+                Instantiate(Bush, new Vector3(randx, 0f, randz), Quaternion.identity);
+                bushesCreated++;
+            }
         }
         
 
@@ -29,7 +33,7 @@ public class FoliageRandomizer : MonoBehaviour
 
     void Update()
     {
-        if (posGrabbed == false && bushesCreated < 65)
+        if (posGrabbed == false && bushesCreated < 70)
         {
             GetRandomPos();
             Instantiate(Bush, new Vector3(randx, 0f, randz), Quaternion.identity);
@@ -49,8 +53,8 @@ public class FoliageRandomizer : MonoBehaviour
 
     void GetRandomPos()
     {
-        randx = Random.Range(-217f, 222f);
-        randz = Random.Range(370f, 16f);
+        randx = Random.Range(-160f, 180f);
+        randz = Random.Range(30f, 300f);
         bushesCreated += 1;
     }
 
