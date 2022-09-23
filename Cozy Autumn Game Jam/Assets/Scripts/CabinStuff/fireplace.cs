@@ -16,8 +16,8 @@ namespace StarterAssets
         float playerDistance;
         float time = 0f;
         float timeB = 0f;
-        float flamedecreasetime = 0.3f;
-        float flameflickertime = .1f;
+        float flamedecreasetime = 1f;
+        float flameflickertime = 0.1f;
         public AudioSource fireSound;
         public ParticleSystem parts;
 
